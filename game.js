@@ -62,7 +62,7 @@ function Main(){
 	var BIRDINTSPEED = 8;
 	var BIRDDOWNRATE = 0.4;
 	
-	var GROUNDSPEED = 6;
+	var GROUNDSPEED = 4;//地面速度
 	/*---------------------------*/
 	var PILES = [];
 	
