@@ -1,0 +1,11 @@
+{
+  "name": "ppbird",
+  "version": "1.0.0",
+  "description": "a game",
+  "main": "game.js",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.14.0",
+    "pixi.js": "^4.0.0"
+  }
+}
