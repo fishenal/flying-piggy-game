@@ -17,18 +17,5 @@
 <body>
 	<img src="../img/bg.png" style="display:none">
 	<script src="game.js"></script>
-	<script type="text/javascript">
-		document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-		    // 发送给好友
-		    WeixinJSBridge.on('menu:share:appmessage', function(argv){
-		        alert(1);
-		    });
-		    // 分享到朋友圈
-		    WeixinJSBridge.on('menu:share:timeline', function(argv){
-		        alert(1);
-		    });
-
-		}, false);	
-	</script>
 </body>
 </html>
