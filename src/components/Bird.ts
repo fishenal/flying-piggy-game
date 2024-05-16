@@ -7,6 +7,7 @@ class Bird extends AnimatedSprite {
     public verSpeed: number = birdConfig.intSpeed;
     constructor() {
         super([Texture.from('bird'), Texture.from('bird2')]);
+        this.anchor = 0.5;
         emitter.on('isPausedChange', (status) => {
             this.isPaused = status;
         });

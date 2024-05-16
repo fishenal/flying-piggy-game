@@ -1,10 +1,10 @@
 import { Container, Sprite, TilingSprite } from 'pixi.js';
 import { birdConfig, globalConfig } from '../utils/config';
 import { emitter } from '../store/emitter';
-import Bird from './Bird';
-import { HandSign, ScoreBoard } from './Hub';
-import Piles from './Piles';
-import { FinishPopup } from './FinishPopup';
+import Bird from '../components/Bird';
+import { HandSign, ScoreBoard } from '../components/Hub';
+import Piles from '../components/Piles';
+import { FinishPopup } from '../components/FinishPopup';
 
 class GameScreen extends Container {
     private isPaused: boolean = true;

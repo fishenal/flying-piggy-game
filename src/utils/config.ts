@@ -10,8 +10,8 @@ export const pileConfig = {
 };
 export const birdConfig = {
     x: 100,
-    h: 48,
-    w: 60,
+    h: 105,
+    w: 134,
     y: 200,
     downRate: 0.4,
     intSpeed: 8,
