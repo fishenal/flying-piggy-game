@@ -3,7 +3,7 @@ import { Match3OnMatchData, Match3OnMoveData, Match3OnPopData } from '../match3/
 import { Match3Piece } from '../match3/Match3Piece';
 import { randomRange } from '../utils/random';
 import gsap from 'gsap';
-import { GameScreen } from '../screens/GameScreen';
+import { GameScreen } from '../screens/GameScreen2';
 import { earthquake, registerCustomEase } from '../utils/animation';
 import { getDistance } from '../utils/maths';
 import { pool } from '../utils/pool';

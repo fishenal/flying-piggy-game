@@ -1,6 +1,7 @@
 import { Container, Graphics, Sprite, Texture, Text } from 'pixi.js';
 import { emitter } from '../store/emitter';
-
+import gsap from 'gsap';
+import { scoreSingleton } from '../store/score';
 export class HandSign extends Sprite {
     constructor() {
         super(Texture.from('hand'));
@@ -20,7 +21,6 @@ export class ScoreBoard extends Container {
     constructor() {
         super();
         emitter.on('scoreChange', (score) => {
-            console.log('🚀 ~ ScoreBoard ~ emitter.on ~ score:', score);
             this.point.text = score;
         });
         const width = 100;
@@ -47,7 +47,9 @@ export class ScoreBoard extends Container {
         this.point.position.x = 38;
         this.point.position.y = 10;
         this.addChild(this.point);
-        this.onRender = () => {};
+    }
+    public reset() {
+        scoreSingleton.reset();
     }
 }
 

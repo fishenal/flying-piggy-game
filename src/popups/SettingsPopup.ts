@@ -9,7 +9,7 @@ import { userSettings } from '../utils/userSettings';
 import { List } from '@pixi/ui';
 import { VolumeSlider } from '../ui/VolumeSlider';
 import { ModeSwitcher } from '../ui/ModeSwitcher';
-import { GameScreen } from '../screens/GameScreen';
+import { GameScreen } from '../screens/GameScreen2';
 
 /** Popup for volume and game mode settings - game mode cannot be changed during gameplay */
 export class SettingsPopup extends Container {

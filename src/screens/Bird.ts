@@ -16,8 +16,7 @@ class Bird extends AnimatedSprite {
         this.anchor.y = 0.5;
         this.width = birdConfig.w;
         this.height = birdConfig.h;
-        this.position.x = birdConfig.x;
-        this.position.y = birdConfig.y;
+        this.init();
         this.onRender = () => {
             if (this.isPaused) return;
             this.position.y -= this.verSpeed;
@@ -36,6 +35,12 @@ class Bird extends AnimatedSprite {
                 }
             }
         };
+    }
+    public init() {
+        this.position.x = birdConfig.x;
+        this.position.y = birdConfig.y;
+        this.rotation = 0;
+        this.verSpeed = birdConfig.intSpeed;
     }
 }
 

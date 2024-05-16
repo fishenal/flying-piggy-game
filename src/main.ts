@@ -2,7 +2,7 @@ import '@pixi/spine-pixi';
 
 import { Application } from 'pixi.js';
 import { initAssets } from './utils/assets';
-import HomeScreen from './screens/HomeScreen';
+import GameScreen from './screens/GameScreen';
 import LoadScreen from './screens/LoadScreen';
 
 /** The PixiJS app Application instance, shared across the project */
@@ -56,9 +56,9 @@ async function init() {
     await initAssets();
 
     app.stage.removeChild(loadScreen);
-    const homeScreen = new HomeScreen();
+    const gameScreen = new GameScreen();
 
-    app.stage.addChild(homeScreen);
+    app.stage.addChild(gameScreen);
 
     // app.ticker.stop();
     // Add a persisting background shared by all screens

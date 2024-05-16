@@ -5,7 +5,7 @@ import { i18n } from '../utils/i18n';
 import { ResultStars } from '../ui/ResultStars';
 import { Dragon } from '../ui/Dragon';
 import { LargeButton } from '../ui/LargeButton';
-import { GameScreen } from './GameScreen';
+import { GameScreen } from './GameScreen2';
 import { navigation } from '../utils/navigation';
 import { CloudLabel } from '../ui/CloudLabel';
 import { ResultScore } from '../ui/ResultScore';

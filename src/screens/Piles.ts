@@ -1,4 +1,4 @@
-import { Container, Graphics, Pool, Sprite } from 'pixi.js';
+import { Container, NineSliceSprite, Sprite, Texture } from 'pixi.js';
 import { birdConfig, globalConfig, pileConfig } from '../utils/config';
 import { emitter } from '../store/emitter';
 import { randomRange } from '../utils/random';
@@ -7,106 +7,116 @@ import { scoreSingleton } from '../store/score';
 
 class Pile extends Container {
     private randomPassPoint: number = 0;
-    private graphics: Graphics;
     public crossingBird: boolean;
     public yRange: number[];
-
-    constructor() {
+    public idx: number;
+    constructor(idx: number) {
         super();
+        this.idx = idx;
         this.crossingBird = false;
         this.yRange = [0, 0];
-        this.graphics = new Graphics();
-        const pile = Sprite.from('pile');
-        this.width = pile.width = pileConfig.pileWidth;
-        this.height = pile.height = window.innerHeight - globalConfig.groundHeight;
+        const pileHeight = window.innerHeight - globalConfig.groundHeight;
+        this.width = pileConfig.pileWidth;
+        this.height = pileHeight;
         this.position.y = 0;
-        this.addChild(pile);
-    }
-    init({ num }: { num: number }) {
-        this.height = window.innerHeight - globalConfig.groundHeight;
+        this.position.x = idx * pileConfig.pileGap;
 
-        this.randomPassPoint = randomRange(0, this.height - pileConfig.gapHeight + 1);
+        this.randomPassPoint = randomRange(0, pileHeight - pileConfig.gapHeight + 1);
         this.yRange = [this.randomPassPoint, this.randomPassPoint + pileConfig.gapHeight];
-        this.graphics = new Graphics();
-        this.graphics.rect(0, 0, pileConfig.pileWidth, this.randomPassPoint);
-        this.graphics.rect(
-            0,
-            this.randomPassPoint + pileConfig.gapHeight,
-            pileConfig.pileWidth,
-            this.height - this.randomPassPoint - pileConfig.gapHeight,
-        );
-        this.graphics.fill(0x000000);
 
-        this.addChild(this.graphics);
-        this.mask = this.graphics;
-        this.position.x = num * pileConfig.pileGap;
-    }
-    reset() {
-        this.mask = null;
-        this.graphics.destroy();
-        this.crossingBird = false;
-        this.yRange = [0, 0];
+        const pile1 = new NineSliceSprite({
+            texture: Texture.from('pile_up'),
+            bottomHeight: 45,
+        });
+        pile1.width = pileConfig.pileWidth;
+        pile1.x = 0;
+        pile1.y = 0;
+        pile1.height = this.randomPassPoint;
+
+        const pile2 = new NineSliceSprite({
+            texture: Texture.from('pile_down'),
+            topHeight: 45,
+        });
+        pile2.x = 0;
+        pile2.y = this.randomPassPoint + pileConfig.gapHeight;
+        pile2.width = pileConfig.pileWidth;
+        pile2.height = pileHeight - this.randomPassPoint - pileConfig.gapHeight;
+
+        const pileShadow = Sprite.from('pile_shadow');
+        pileShadow.y = pileHeight;
+        pileShadow.x = -135;
+        pileShadow.width = pileConfig.pileWidth + 135;
+
+        this.addChild(pile1);
+        this.addChild(pile2);
+        this.addChild(pileShadow);
     }
 }
 
 class Piles extends Container {
-    private pilePool: Pool<Pile>;
     private isPaused: boolean = true;
     private bird: Bird;
+    private initPileNum: number;
+    private currentPileIdx: number;
+
     constructor(bird: Bird) {
         super();
         emitter.on('isPausedChange', (status) => {
             this.isPaused = status;
         });
         this.bird = bird;
-        const voidWidth = window.innerWidth - birdConfig.w - birdConfig.x - pileConfig.pileGap;
-        const initPileNum = Math.ceil(voidWidth / (pileConfig.pileWidth + pileConfig.pileGap)) + 1;
-        this.pilePool = new Pool(Pile, initPileNum);
-        const piles: Pile[] = [];
-        let currentPileIdx = initPileNum + 1;
-        for (let i = 0; i < initPileNum + 1; i++) {
-            const p = this.pilePool.get({ num: i });
-            piles.push(p);
-            this.addChild(p);
-        }
-        this.position.x = 400;
+        this.initPileNum = 0;
+        this.currentPileIdx = 0;
+        this.init();
+
         this.onRender = () => {
             if (this.isPaused) {
                 return;
             }
             this.position.x -= 4;
-            const frontPileX = piles[0].getGlobalPosition().x;
-            if (this.bird.position.y > piles[0].height - birdConfig.h / 2) {
+            const frontPile: Pile = this.getChildAt(0);
+            const frontPileX = frontPile.getGlobalPosition().x;
+
+            if (this.bird.position.y > frontPile.height - birdConfig.h / 2) {
                 this.onLoss();
             }
             if (frontPileX <= 130 && frontPileX >= birdConfig.x - pileConfig.pileWidth) {
                 if (
-                    this.bird.position.y <= piles[0].yRange[0] + birdConfig.h / 2 ||
-                    this.bird.position.y >= piles[0].yRange[1] - birdConfig.h / 2
+                    this.bird.position.y <= frontPile.yRange[0] + birdConfig.h / 2 ||
+                    this.bird.position.y >= frontPile.yRange[1] - birdConfig.h / 2
                 ) {
                     this.onLoss();
                 }
                 if (frontPileX === birdConfig.x - pileConfig.pileWidth) {
                     this.onPass();
                 }
-                piles[0].crossingBird = true;
+                frontPile.crossingBird = true;
             }
 
+            // frontPile leave stage
             if (frontPileX < -pileConfig.pileWidth) {
-                const p = piles.shift();
-                console.log('on return', this.pilePool.totalSize, this.pilePool.totalUsed);
-                if (p) {
-                    this.pilePool.return(p);
-                    const newPile = this.pilePool.get({ num: currentPileIdx });
-                    piles.push(newPile);
-                    this.addChild(newPile);
-                    currentPileIdx += 1;
-                }
+                this.removeChildAt(0);
+                this.addChild(new Pile(this.currentPileIdx));
+                this.currentPileIdx += 1;
             }
         };
     }
+
+    public init() {
+        this.removeChildren();
+        const voidWidth = window.innerWidth - birdConfig.w - birdConfig.x - pileConfig.pileGap;
+        this.initPileNum = Math.ceil(voidWidth / (pileConfig.pileWidth + pileConfig.pileGap)) + 1;
+        this.currentPileIdx = this.initPileNum + 1;
+        for (let i = 0; i < this.initPileNum + 1; i++) {
+            const p = new Pile(i);
+            this.addChild(p);
+        }
+
+        this.position.x = 400;
+    }
     public onLoss() {
         emitter.emit('isPausedChange', true);
+        emitter.emit('onLoss', true);
     }
     public onPass() {
         scoreSingleton.count();
