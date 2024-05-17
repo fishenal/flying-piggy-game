@@ -4,6 +4,7 @@ import { emitter } from '../store/emitter';
 import { randomRange } from '../utils/random';
 import Bird from './Bird';
 import { scoreSingleton } from '../store/score';
+import { app } from '../main';
 
 class Pile extends Container {
     private randomPassPoint: number = 0;
@@ -73,11 +74,12 @@ class Piles extends Container {
             if (this.isPaused) {
                 return;
             }
-            this.position.x -= 4;
+            this.position.x -= globalConfig.pileSpeed;
             const frontPile: Pile = this.getChildAt(0);
             const frontPileX = frontPile.getGlobalPosition().x;
 
             if (this.bird.position.y > frontPile.height - birdConfig.h / 2) {
+                console.log('run here');
                 this.onLoss();
             }
             if (frontPileX <= 130 && frontPileX >= birdConfig.x - pileConfig.pileWidth) {
@@ -112,11 +114,12 @@ class Piles extends Container {
             this.addChild(p);
         }
 
-        this.position.x = 400;
+        this.position.x = pileConfig.firstPileX;
     }
     public onLoss() {
         emitter.emit('isPausedChange', true);
         emitter.emit('onLoss', true);
+        app.stop();
     }
     public onPass() {
         scoreSingleton.count();

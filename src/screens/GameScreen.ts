@@ -1,73 +1,46 @@
-import { Container, Sprite, TilingSprite } from 'pixi.js';
-import { birdConfig, globalConfig } from '../utils/config';
+import { Container } from 'pixi.js';
 import { emitter } from '../store/emitter';
 import Bird from '../components/Bird';
 import { HandSign, ScoreBoard } from '../components/Hub';
 import Piles from '../components/Piles';
 import { FinishPopup } from '../components/FinishPopup';
+import { Background, Cloud, Ground } from '../components/Background';
+import { app } from '../main';
 
 class GameScreen extends Container {
-    private isPaused: boolean = true;
     constructor() {
         super();
 
         this.eventMode = 'auto';
-        // this.interactiveChildren = true;
-        this.cursor = 'pointer';
-
-        const bg = Sprite.from('bg');
-
-        bg.interactive = true;
-        bg.width = window.innerWidth;
-        bg.height = window.innerHeight - globalConfig.groundHeight;
-        this.addChild(bg);
-        const fb = TilingSprite.from('run_bg', {
-            width: window.innerWidth,
-            height: globalConfig.groundHeight,
-            x: 0,
-            y: window.innerHeight - globalConfig.groundHeight,
-        });
-        this.addChild(fb);
 
         const bird = new Bird();
-
-        this.addChild(bird);
+        const background = new Background(bird);
+        const ground = new Ground();
+        const cloud = new Cloud();
         const handSign = new HandSign();
-        this.addChild(handSign);
-
         const piles = new Piles(bird);
-        this.addChild(piles);
-
         const pointBoard = new ScoreBoard();
-        this.addChild(pointBoard);
-
         const finishPopup = new FinishPopup();
+
+        this.addChild(background);
+        this.addChild(cloud);
+        this.addChild(ground);
+        this.addChild(bird);
+        this.addChild(handSign);
+        this.addChild(piles);
+        this.addChild(pointBoard);
         this.addChild(finishPopup);
-
-        bg.on('pointerdown', () => {
-            //toggle();
-            emitter.emit('isPausedChange', false);
-            this.isPaused = false;
-
-            bird.verSpeed = birdConfig.intSpeed;
-        });
 
         emitter.on('onReset', () => {
             console.log('on reset');
             emitter.emit('isPausedChange', true);
-            this.isPaused = true;
             bird.init();
             piles.init();
             pointBoard.reset();
             finishPopup.reset();
             finishPopup.hide();
+            app.start();
         });
-
-        // app.ticker.stop();
-        this.onRender = () => {
-            if (this.isPaused) return;
-            fb.tilePosition.x -= globalConfig.groundSpeed;
-        };
     }
 }
 

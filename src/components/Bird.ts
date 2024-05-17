@@ -6,7 +6,7 @@ class Bird extends AnimatedSprite {
     private isPaused: boolean = true;
     public verSpeed: number = birdConfig.intSpeed;
     constructor() {
-        super([Texture.from('bird'), Texture.from('bird2')]);
+        super([Texture.from('fly_piggy1'), Texture.from('fly_piggy2')]);
         this.anchor = 0.5;
         emitter.on('isPausedChange', (status) => {
             this.isPaused = status;

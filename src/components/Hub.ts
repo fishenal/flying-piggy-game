@@ -1,6 +1,6 @@
 import { Container, Graphics, Sprite, Texture, Text } from 'pixi.js';
 import { emitter } from '../store/emitter';
-import gsap from 'gsap';
+
 import { scoreSingleton } from '../store/score';
 export class HandSign extends Sprite {
     constructor() {
