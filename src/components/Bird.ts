@@ -15,7 +15,7 @@ class Bird extends AnimatedSprite {
         this.play();
         this.anchor.x = 0.5;
         this.anchor.y = 0.5;
-        this.width = birdConfig.w;
+        this.width = birdConfig.w
         this.height = birdConfig.h;
         this.init();
         this.onRender = () => {

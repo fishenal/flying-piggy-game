@@ -11,46 +11,57 @@ class Pile extends Container {
     public crossingBird: boolean;
     public yRange: number[];
     public idx: number;
+    private pileShadow: Sprite;
+    private pile1: NineSliceSprite;
+    private pile2: NineSliceSprite;
+    private screenHeight: number;
     constructor(idx: number) {
         super();
         this.idx = idx;
         this.crossingBird = false;
         this.yRange = [0, 0];
-        const pileHeight = window.innerHeight - globalConfig.groundHeight;
+        this.screenHeight = window.innerHeight;
+        emitter.on('onResize', ({ height }) => {
+            this.screenHeight = height;
+            const pileHeight = height - globalConfig.groundHeight;
+            this.pile2.height = pileHeight - this.randomPassPoint - pileConfig.gapHeight;
+            this.pileShadow.y = pileHeight;
+        });
+        const pileHeight = this.screenHeight - globalConfig.groundHeight;
         this.width = pileConfig.pileWidth;
         this.height = pileHeight;
         this.position.y = 0;
-        this.position.x = idx * pileConfig.pileGap;
+        this.position.x = this.idx * pileConfig.pileGap;
 
         this.randomPassPoint = randomRange(0, pileHeight - pileConfig.gapHeight + 1);
         this.yRange = [this.randomPassPoint, this.randomPassPoint + pileConfig.gapHeight];
 
-        const pile1 = new NineSliceSprite({
+        this.pile1 = new NineSliceSprite({
             texture: Texture.from('pile_up'),
             bottomHeight: 45,
         });
-        pile1.width = pileConfig.pileWidth;
-        pile1.x = 0;
-        pile1.y = 0;
-        pile1.height = this.randomPassPoint;
+        this.pile1.width = pileConfig.pileWidth;
+        this.pile1.x = 0;
+        this.pile1.y = 0;
+        this.pile1.height = this.randomPassPoint;
 
-        const pile2 = new NineSliceSprite({
+        this.pile2 = new NineSliceSprite({
             texture: Texture.from('pile_down'),
             topHeight: 45,
         });
-        pile2.x = 0;
-        pile2.y = this.randomPassPoint + pileConfig.gapHeight;
-        pile2.width = pileConfig.pileWidth;
-        pile2.height = pileHeight - this.randomPassPoint - pileConfig.gapHeight;
+        this.pile2.x = 0;
+        this.pile2.y = this.randomPassPoint + pileConfig.gapHeight;
+        this.pile2.width = pileConfig.pileWidth;
+        this.pile2.height = pileHeight - this.randomPassPoint - pileConfig.gapHeight;
 
-        const pileShadow = Sprite.from('pile_shadow');
-        pileShadow.y = pileHeight;
-        pileShadow.x = -135;
-        pileShadow.width = pileConfig.pileWidth + 135;
-
-        this.addChild(pile1);
-        this.addChild(pile2);
-        this.addChild(pileShadow);
+        this.pileShadow = Sprite.from('pile_shadow');
+        this.pileShadow.y = pileHeight;
+        this.pileShadow.x = -135;
+        this.pileShadow.width = pileConfig.pileWidth + 135;
+        this.pileShadow.height = 150;
+        this.addChild(this.pileShadow);
+        this.addChild(this.pile1);
+        this.addChild(this.pile2);
     }
 }
 
@@ -59,7 +70,6 @@ class Piles extends Container {
     private bird: Bird;
     private initPileNum: number;
     private currentPileIdx: number;
-
     constructor(bird: Bird) {
         super();
         emitter.on('isPausedChange', (status) => {
@@ -79,10 +89,9 @@ class Piles extends Container {
             const frontPileX = frontPile.getGlobalPosition().x;
 
             if (this.bird.position.y > frontPile.height - birdConfig.h / 2) {
-                console.log('run here');
                 this.onLoss();
             }
-            if (frontPileX <= 130 && frontPileX >= birdConfig.x - pileConfig.pileWidth) {
+            if (frontPileX <= birdConfig.x + birdConfig.w / 2 && frontPileX >= birdConfig.x - pileConfig.pileWidth) {
                 if (
                     this.bird.position.y <= frontPile.yRange[0] + birdConfig.h / 2 ||
                     this.bird.position.y >= frontPile.yRange[1] - birdConfig.h / 2

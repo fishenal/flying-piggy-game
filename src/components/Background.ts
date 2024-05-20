@@ -6,16 +6,21 @@ import gsap from 'gsap';
 
 export class Background extends Container {
     private bird: Bird;
+    private bg: Sprite;
     constructor(bird: Bird) {
         super();
+        emitter.on('onResize', ({ width, height }) => {
+            this.bg.width = width;
+            this.bg.height = height;
+        });
         this.bird = bird;
-        const bg = Sprite.from('bg');
-        bg.interactive = true;
-        bg.width = window.innerWidth;
-        bg.height = window.innerHeight - globalConfig.groundHeight;
-        bg.cursor = 'pointer';
-        this.addChild(bg);
-        bg.on('pointerdown', () => {
+        this.bg = Sprite.from('bg');
+        this.bg.interactive = true;
+        this.bg.width = window.innerWidth;
+        this.bg.height = window.innerHeight - globalConfig.groundHeight;
+        this.bg.cursor = 'pointer';
+        this.addChild(this.bg);
+        this.bg.on('pointerdown', () => {
             emitter.emit('isPausedChange', false);
             this.bird.verSpeed = birdConfig.intSpeed;
         });
@@ -24,41 +29,56 @@ export class Background extends Container {
 
 export class Ground extends Container {
     private isPaused: boolean = true;
+    private ground: TilingSprite;
     constructor() {
         super();
-        const fb = TilingSprite.from('ground', {
+        emitter.on('onResize', ({ width, height }) => {
+            this.ground.y = height - globalConfig.groundHeight - 40;
+            this.ground.width = width;
+        });
+        this.ground = TilingSprite.from('ground', {
             width: window.innerWidth,
             height: globalConfig.groundHeight + 40,
             x: 0,
             y: window.innerHeight - globalConfig.groundHeight - 40,
             tileScale: { x: 0.5, y: 0.5 },
         });
-        fb.onRender = () => {
+        this.ground.onRender = () => {
             if (this.isPaused) {
                 return;
             }
-            fb.tilePosition.x -= globalConfig.pileSpeed - 2;
+            this.ground.tilePosition.x -= globalConfig.pileSpeed - 2;
         };
-        this.addChild(fb);
+        this.addChild(this.ground);
     }
 }
 
 export class Cloud extends Container {
+    private cloud: TilingSprite;
     constructor() {
         super();
-        const cloud = TilingSprite.from('cloud', {
+        emitter.on('onResize', ({ width, height }) => {
+            this.cloud.width = width;
+            this.cloud.y = height - globalConfig.groundHeight - 150;
+            this.flow();
+        });
+        this.cloud = TilingSprite.from('cloud', {
             width: window.innerWidth,
             height: 195,
             x: 0,
             y: window.innerHeight - globalConfig.groundHeight - 150,
             tileScale: { x: 0.4, y: 0.4 },
         });
+        this.flow();
+        this.addChild(this.cloud);
+    }
+    private flow() {
+        gsap.killTweensOf(this.cloud);
         const flow = gsap.timeline({
             repeat: -1,
             yoyo: true,
         });
-        flow.to(cloud, { y: window.innerHeight - globalConfig.groundHeight - 195, ease: 'linear', duration: 4 });
-        flow.to(cloud, { y: window.innerHeight - globalConfig.groundHeight - 150, ease: 'linear', duration: 4 });
-        this.addChild(cloud);
+        flow.to(this.cloud, { y: this.cloud.y - 45, ease: 'linear', duration: 4 });
+        flow.to(this.cloud, { y: this.cloud.y, ease: 'linear', duration: 4 });
     }
 }

@@ -32,7 +32,6 @@ class GameScreen extends Container {
         this.addChild(finishPopup);
 
         emitter.on('onReset', () => {
-            console.log('on reset');
             emitter.emit('isPausedChange', true);
             bird.init();
             piles.init();
