@@ -88,7 +88,7 @@ class Piles extends Container {
             const frontPile: Pile = this.getChildAt(0);
             const frontPileX = frontPile.getGlobalPosition().x;
 
-            if (this.bird.position.y > frontPile.height - birdConfig.h / 2) {
+            if (this.bird.position.y > frontPile.height - globalConfig.groundHeight - birdConfig.h) {
                 this.onLoss();
             }
             if (frontPileX <= birdConfig.x + birdConfig.w / 2 && frontPileX >= birdConfig.x - pileConfig.pileWidth) {
