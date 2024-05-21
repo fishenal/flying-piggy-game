@@ -1,8 +1,10 @@
 import { Container, NineSliceSprite, Texture } from 'pixi.js';
 import { emitter } from '../store/emitter';
+import gsap from 'gsap';
 
 export class CommonPopup extends Container {
     private board: NineSliceSprite;
+    private toX: number;
     constructor() {
         super();
         emitter.on('onResize', ({ width, height }) => {
@@ -10,6 +12,7 @@ export class CommonPopup extends Container {
             const popHeight = height / 1.5;
             this.width = popWidth;
             this.height = popHeight;
+            this.toX = width / 2 - popWidth / 2;
             this.position.x = width / 2 - popWidth / 2;
             this.position.y = height / 2 - popHeight / 2;
             this.board.width = popWidth;
@@ -20,7 +23,8 @@ export class CommonPopup extends Container {
         const popHeight = window.innerHeight / 1.5;
         this.width = popWidth;
         this.height = popHeight;
-        this.position.x = window.innerWidth / 2 - popWidth / 2;
+        this.toX = window.innerWidth / 2 - popWidth / 2;
+        this.position.x = -3000;
         this.position.y = window.innerHeight / 2 - popHeight / 2;
         this.board = new NineSliceSprite({
             texture: Texture.from('popBg'),
@@ -37,9 +41,22 @@ export class CommonPopup extends Container {
     }
     public show() {
         this.visible = true;
+        gsap.to(this, {
+            x: this.toX,
+            duration: 0.5,
+            ease: 'power2.inOut',
+        });
     }
     public hide() {
-        this.visible = false;
+        gsap.to(this, {
+            x: 3000,
+            duration: 0.5,
+            ease: 'power2.inOut',
+            onComplete: () => {
+                this.visible = false;
+                gsap.killTweensOf(this);
+            },
+        });
     }
-    public onResize(param: { width: number; height: number }) {}
+    public onResize(_param: { width: number; height: number }) {}
 }
