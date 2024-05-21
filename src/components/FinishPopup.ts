@@ -14,6 +14,7 @@ export class FinishPopup extends CommonPopup {
     private scoreText: CommonBoard | null;
     private button: CommonButton | null;
     private button2: CommonButton | null;
+    private buttonBack: CommonButton | null;
     constructor() {
         super();
         this.point = 0;
@@ -23,6 +24,7 @@ export class FinishPopup extends CommonPopup {
         this.scoreText = null;
         this.button = null;
         this.button2 = null;
+        this.buttonBack = null;
         this.interactive = false;
         this.onResize = ({ width, height }) => {
             this.width = width;
@@ -34,6 +36,7 @@ export class FinishPopup extends CommonPopup {
                 this.reset();
                 this.renderContent();
                 this.show();
+                emitter.emit('finishPopupIsShow', true);
             }
         });
         emitter.on('scoreChange', (score: number) => {
@@ -53,23 +56,28 @@ export class FinishPopup extends CommonPopup {
             label: String(this.point),
         });
         this.button = new CommonButton({
-            label: 'Again',
-            size: 'lg',
+            text: 'Again',
+            onPress: () => {
+                emitter.emit('onReset');
+                emitter.emit('finishPopupIsShow', false);
+            },
         });
-        this.button.onclick = (e) => {
-            e?.stopPropagation();
-            emitter.emit('onReset');
-        };
 
         this.button2 = new CommonButton({
-            label: 'Continue',
-            size: 'lg',
+            text: 'Continue',
+            onPress: () => {
+                this.hide();
+                console.log('🚀 ~ FinishPopup ~ renderContent ~ type:');
+            },
         });
-        this.button2.onclick = (e) => {
-            e?.stopPropagation();
-            console.log('continue play');
-            // emitter.emit('onReset');
-        };
+
+        this.buttonBack = new CommonButton({
+            text: '<',
+            onPress: () => {
+                console.log('🚀 ~ FinishPopup ~ renderContent ~ type:');
+            },
+        });
+
         if (this.point > Number(this.hiScore)) {
             this.mood = Sprite.from('fly_piggy_win');
         } else if (this.point < Number(this.hiScore) / 2) {
@@ -84,6 +92,12 @@ export class FinishPopup extends CommonPopup {
         this.popLayout = new Layout({
             id: 'finishPopup',
             content: {
+                backButton: {
+                    content: this.buttonBack,
+                    styles: {
+                        position: 'leftTop',
+                    },
+                },
                 scoreText: {
                     content: this.scoreText,
                     styles: {
@@ -136,7 +150,8 @@ export class FinishPopup extends CommonPopup {
                     ],
                     styles: {
                         position: 'centerBottom',
-                        height: '25%',
+                        paddingLeft: 190,
+                        height: '15%',
                     },
                 },
             },

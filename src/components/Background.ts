@@ -7,11 +7,16 @@ import gsap from 'gsap';
 export class Background extends Container {
     private bird: Bird;
     private bg: Sprite;
+    private popupIsShow: boolean;
     constructor(bird: Bird) {
         super();
+        this.popupIsShow = false;
         emitter.on('onResize', ({ width, height }) => {
             this.bg.width = width;
             this.bg.height = height;
+        });
+        emitter.on('finishPopupIsShow', (status) => {
+            this.popupIsShow = status;
         });
         this.bird = bird;
         this.bg = Sprite.from('bg');
@@ -21,6 +26,9 @@ export class Background extends Container {
         this.bg.cursor = 'pointer';
         this.addChild(this.bg);
         this.bg.on('pointerdown', () => {
+            if (this.popupIsShow) {
+                return;
+            }
             emitter.emit('isPausedChange', false);
             this.bird.verSpeed = birdConfig.intSpeed;
         });
