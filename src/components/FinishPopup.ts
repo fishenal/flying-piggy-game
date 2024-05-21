@@ -51,9 +51,6 @@ export class FinishPopup extends CommonPopup {
         }
         this.scoreText = new CommonBoard({
             label: String(this.point),
-            width: 200,
-            height: 60,
-            padding: 10,
         });
         this.button = new CommonButton({
             label: 'Again',
@@ -93,6 +90,7 @@ export class FinishPopup extends CommonPopup {
                         position: 'centerTop',
                         height: '20%',
                         paddingTop: 50,
+                        paddingLeft: 100,
                     },
                 },
                 mood: {

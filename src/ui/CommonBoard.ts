@@ -1,34 +1,35 @@
-import { Container, Graphics, Text } from 'pixi.js';
+import { Layout } from '@pixi/layout';
+import { Container, Text } from 'pixi.js';
 
 export class CommonBoard extends Container {
     private text: Text;
-    constructor({ label, width, height, padding }: { label: string; width: number; height: number; padding: number }) {
+    private wrapper: Layout;
+    constructor({ label }: { label: string; width?: number; height?: number; padding?: number }) {
         super();
-
         this.text = new Text({
             text: label,
-            style: {
+        });
+        this.wrapper = new Layout({
+            content: this.text,
+            styles: {
+                background: 0x84d0ff,
+                color: 0xffffff,
+                borderRadius: 15,
+                fontSize: 30,
                 fontFamily: 'Shrikhand',
-                fill: 0xffffff,
+                // marginLeft: 150,
+                width: 100,
+                position: 'center',
+                textAlign: 'center',
+                height: 50,
+                anchorY: 0,
             },
         });
+        this.wrapper.resize(this.width, this.height);
 
-        this.text.x = padding;
-        this.text.y = padding;
-
-        const button = new Graphics();
-        button.roundRect(0, 0, this.text.width + padding * 2, height, 15);
-        button.fill(0x84d0ff);
-        // this.text.onViewUpdate = () => {
-        //     button.width = this.text.width + padding * 2;
-        // };
-        // text.width = width - padding * 2;
-        // text.height = height - padding * 2;
-        this.addChild(button);
-        this.addChild(this.text);
+        this.addChild(this.wrapper);
     }
     public update({ label }: { label: string }) {
-        console.log('on this update', label, this.text);
         this.text.text = label;
     }
 }
