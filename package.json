@@ -18,6 +18,7 @@
     "format:check": "prettier --check src"
   },
   "dependencies": {
+    "@pixi/layout": "^2.0.1",
     "@pixi/sound": "^6.0.0",
     "@pixi/spine-pixi": "^1.0.8",
     "@pixi/ui": "^2.0.1",

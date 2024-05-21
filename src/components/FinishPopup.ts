@@ -3,34 +3,37 @@ import { scoreSingleton } from '../store/score';
 import { CommonBoard } from '../ui/CommonBoard';
 import { CommonButton } from '../ui/CommonButton';
 import { CommonPopup } from '../ui/CommonPopup';
-import { Container, Sprite, Text } from 'pixi.js';
+import { Sprite, Text } from 'pixi.js';
+import { Layout } from '@pixi/layout';
 
 export class FinishPopup extends CommonPopup {
     private point: number;
     private hiScore: string;
     private mood: Sprite | null;
-    private container: Container;
-    private gap: number = 10;
+    private popLayout: Layout | null;
+    private scoreText: CommonBoard | null;
+    private button: CommonButton | null;
+    private button2: CommonButton | null;
     constructor() {
         super();
         this.point = 0;
         this.hiScore = scoreSingleton.hiScore;
         this.mood = null;
+        this.popLayout = null;
+        this.scoreText = null;
+        this.button = null;
+        this.button2 = null;
         this.interactive = false;
-        // this.width = 600;
-        // this.height = 600;
-        // this.x = 0;
-        // this.y = 0;
-        this.container = new Container();
-        this.addChild(this.container);
-        this.renderButton();
+        this.onResize = ({ width, height }) => {
+            this.width = width;
+            this.height = height;
+            this.popLayout?.resize(width, height);
+        };
         emitter.on('onLoss', (status) => {
             if (status) {
-                this.container.removeChildren();
+                this.reset();
+                this.renderContent();
                 this.show();
-                this.renderScore();
-                this.renderHiScore();
-                this.renderMood();
             }
         });
         emitter.on('scoreChange', (score: number) => {
@@ -38,21 +41,38 @@ export class FinishPopup extends CommonPopup {
         });
     }
     public reset() {
-        this.container.removeChildren();
+        if (this.popLayout) {
+            this.popLayout.destroy();
+        }
     }
-
-    private renderScore() {
-        const scoreText = new CommonBoard({
+    private renderContent() {
+        if (this.point > Number(this.hiScore)) {
+            scoreSingleton.updateHiScore(this.point);
+        }
+        this.scoreText = new CommonBoard({
             label: String(this.point),
-            width: 100,
+            width: 200,
             height: 60,
             padding: 10,
         });
-        scoreText.x = this.width / 2 - scoreText.width / 2;
-        scoreText.y = 50;
-        this.container.addChild(scoreText);
-    }
-    private renderMood() {
+        this.button = new CommonButton({
+            label: 'Again',
+            size: 'lg',
+        });
+        this.button.onclick = (e) => {
+            e?.stopPropagation();
+            emitter.emit('onReset');
+        };
+
+        this.button2 = new CommonButton({
+            label: 'Continue',
+            size: 'lg',
+        });
+        this.button2.onclick = (e) => {
+            e?.stopPropagation();
+            console.log('continue play');
+            // emitter.emit('onReset');
+        };
         if (this.point > Number(this.hiScore)) {
             this.mood = Sprite.from('fly_piggy_win');
         } else if (this.point < Number(this.hiScore) / 2) {
@@ -61,40 +81,74 @@ export class FinishPopup extends CommonPopup {
             this.mood = Sprite.from('fly_piggy1');
         }
 
-        this.mood.width = 100;
-        this.mood.height = 100 / 1.24;
-        this.mood.x = this.width / 2 - this.mood.width / 2;
-        this.mood.y = 50 + 60 + this.gap;
-        // this.mood.anchor = 0.5;
-        // this.mood.scale = 0.5;
-        this.container.addChild(this.mood);
-    }
-    private renderHiScore() {
-        if (this.point > Number(this.hiScore)) {
-            scoreSingleton.updateHiScore(this.point);
-        }
-        const hiScoreText = new Text({
-            text: `HighScore: ${scoreSingleton.hiScore}`,
-            style: {
-                fontFamily: 'Shrikhand',
-                fill: 0xffffff,
+        this.mood.width = 200;
+        this.mood.height = 200 / 1.24;
+
+        this.popLayout = new Layout({
+            id: 'finishPopup',
+            content: {
+                scoreText: {
+                    content: this.scoreText,
+                    styles: {
+                        position: 'centerTop',
+                        height: '20%',
+                        paddingTop: 50,
+                    },
+                },
+                mood: {
+                    content: [
+                        {
+                            content: this.mood,
+                            styles: {
+                                position: 'centerTop',
+                                height: '50%',
+                            },
+                        },
+                        {
+                            content: new Text({
+                                text: `HighScore: ${scoreSingleton.hiScore}`,
+                                style: {
+                                    fontFamily: 'Shrikhand',
+                                    fill: 0xffffff,
+                                },
+                            }),
+                            styles: {
+                                position: 'centerBottom',
+                                height: '50%',
+                            },
+                        },
+                    ],
+                    styles: {
+                        position: 'center',
+                        height: '50%',
+                        aspectRatio: 'flex',
+                    },
+                },
+                button: {
+                    content: [
+                        {
+                            content: this.button,
+                        },
+                        {
+                            content: this.button2,
+                            styles: {
+                                paddingLeft: 20,
+                            },
+                        },
+                    ],
+                    styles: {
+                        position: 'centerBottom',
+                        height: '25%',
+                    },
+                },
+            },
+            styles: {
+                padding: 150,
+                width: '100%',
+                height: '100%',
             },
         });
-        hiScoreText.x = this.width / 2 - hiScoreText.width / 2;
-        hiScoreText.y = 50 + 60 + 100 / 1.24 + this.gap;
-        this.container.addChild(hiScoreText);
-    }
-    private renderButton() {
-        const button = new CommonButton({
-            label: 'Again',
-            size: 'lg',
-        });
-        button.x = this.width / 2 - button.width / 2;
-        button.y = 50 + 60 + 100 / 1.24 + this.gap + 50;
-        button.onclick = (e) => {
-            e?.stopPropagation();
-            emitter.emit('onReset');
-        };
-        this.addChild(button);
+        this.popLayout.resize(this.width, this.height);
+        this.addChild(this.popLayout);
     }
 }

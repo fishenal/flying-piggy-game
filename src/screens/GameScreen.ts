@@ -21,7 +21,6 @@ class GameScreen extends Container {
         const piles = new Piles(bird);
         const pointBoard = new ScoreBoard();
         const finishPopup = new FinishPopup();
-
         this.addChild(background);
         this.addChild(cloud);
         this.addChild(ground);

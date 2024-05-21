@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@pixi/layout':
+        specifier: ^2.0.1
+        version: 2.0.1(pixi.js@8.1.1)
       '@pixi/sound':
         specifier: ^6.0.0
         version: 6.0.0(pixi.js@8.1.1)
@@ -532,6 +535,11 @@ packages:
 
   '@pixi/colord@2.9.6':
     resolution: {integrity: sha512-nezytU2pw587fQstUu1AsJZDVEynjskwOL+kibwcdxsMBFqPsFFNA7xl0ii/gXuDi6M0xj3mfRJj8pBSc2jCfA==}
+
+  '@pixi/layout@2.0.1':
+    resolution: {integrity: sha512-xQj/w44FKLaRn71iEQACxRTYgEVU4c8SXTJKcSIDm/uXgKm3JKRylEOpQ9u6x3gWIFeV5d3gx/oHBJHdZhqAoQ==}
+    peerDependencies:
+      pixi.js: ^8.0.4
 
   '@pixi/runner@7.4.2':
     resolution: {integrity: sha512-LPBpwym4vdyyDY5ucF4INQccaGyxztERyLTY1YN6aqJyyMmnc7iqXlIKt+a0euMBtNoLoxy6MWMvIuZj0JfFPA==}
@@ -3430,6 +3438,10 @@ snapshots:
       rimraf: 3.0.2
 
   '@pixi/colord@2.9.6': {}
+
+  '@pixi/layout@2.0.1(pixi.js@8.1.1)':
+    dependencies:
+      pixi.js: 8.1.1
 
   '@pixi/runner@7.4.2': {}
 
