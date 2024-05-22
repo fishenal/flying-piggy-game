@@ -35,11 +35,13 @@ export class CommonButton extends Container {
         icon,
         width = args.width,
         height = args.height,
+        radius = args.radius,
         onPress,
     }: {
         text: string;
         width?: number;
         height?: number;
+        radius?: number;
         textColor?: number;
         icon?: Sprite;
         onPress: () => void;
@@ -47,7 +49,6 @@ export class CommonButton extends Container {
         super();
 
         const {
-            radius,
             color,
             hoverColor,
             pressedColor,

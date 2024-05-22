@@ -28,6 +28,9 @@ class StartScreen extends Container {
 
         this.startButton = new CommonButton({
             text: 'Start',
+            width: 300,
+            height: 90,
+            radius: 15,
             onPress: () => {
                 this.hide();
                 this.onStartClick();
