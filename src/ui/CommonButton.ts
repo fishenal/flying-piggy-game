@@ -33,9 +33,13 @@ export class CommonButton extends Container {
         text,
         textColor = 0xc0dfff,
         icon,
+        width = args.width,
+        height = args.height,
         onPress,
     }: {
         text: string;
+        width?: number;
+        height?: number;
         textColor?: number;
         icon?: Sprite;
         onPress: () => void;
@@ -43,8 +47,6 @@ export class CommonButton extends Container {
         super();
 
         const {
-            width,
-            height,
             radius,
             color,
             hoverColor,

@@ -7,7 +7,6 @@ import { app } from '../main';
 import StartScreen from './StartScreen';
 import GameContainer from './GameContainer';
 import { birdConfig } from '../utils/config';
-import gsap from 'gsap';
 
 class GameScreen extends Container {
     private popupIsShow: boolean;
@@ -51,19 +50,8 @@ class GameScreen extends Container {
         const startScreen = new StartScreen();
         startScreen.show();
         startScreen.onStartClick = () => {
-            gsap.to(this.bird, {
-                x: birdConfig.x,
-                y: birdConfig.y,
-                width: birdConfig.w,
-                height: birdConfig.h,
-                rotation: 0,
-                duration: 0.6,
-                ease: 'back.out',
-                onComplete: () => {
-                    gameContainer.eventMode = 'static';
-                    gameContainer.cursor = 'pointer';
-                    gameContainer.show();
-                },
+            this.bird.toGamePosition(() => {
+                gameContainer.show();
             });
         };
         this.addChild(startScreen);
@@ -77,6 +65,13 @@ class GameScreen extends Container {
             finishPopup.reset();
             finishPopup.hide();
             app.start();
+        });
+
+        emitter.on('onBack', () => {
+            gameContainer.hide();
+            this.bird.toStartPosition(() => {
+                startScreen.show();
+            });
         });
     }
 }

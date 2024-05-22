@@ -41,6 +41,8 @@ class GameContainer extends Container {
             onComplete: () => {
                 this.handSign.visible = true;
                 this.pointBoard.visible = true;
+                this.eventMode = 'static';
+                this.cursor = 'pointer';
             },
         });
     }
@@ -52,6 +54,8 @@ class GameContainer extends Container {
             onComplete: () => {
                 this.handSign.visible = false;
                 this.pointBoard.visible = false;
+                this.eventMode = 'none';
+                this.cursor = 'normal';
             },
         });
     }

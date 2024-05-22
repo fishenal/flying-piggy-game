@@ -73,8 +73,12 @@ export class FinishPopup extends CommonPopup {
 
         this.buttonBack = new CommonButton({
             text: '<',
+            width: 60,
+            height: 60,
             onPress: () => {
-                console.log('🚀 ~ FinishPopup ~ renderContent ~ type:');
+                emitter.emit('onBack');
+                emitter.emit('finishPopupIsShow', false);
+                this.hide();
             },
         });
 
@@ -96,6 +100,8 @@ export class FinishPopup extends CommonPopup {
                     content: this.buttonBack,
                     styles: {
                         position: 'leftTop',
+                        paddingTop: 50,
+                        paddingLeft: 50,
                     },
                 },
                 scoreText: {

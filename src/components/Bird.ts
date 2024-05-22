@@ -1,6 +1,7 @@
 import { AnimatedSprite, Texture } from 'pixi.js';
 import { birdConfig } from '../utils/config';
 import { emitter } from '../store/emitter';
+import gsap from 'gsap';
 
 class Bird extends AnimatedSprite {
     private isPaused: boolean = true;
@@ -42,6 +43,30 @@ class Bird extends AnimatedSprite {
         this.position.y = birdConfig.y;
         this.rotation = 0;
         this.verSpeed = birdConfig.intSpeed;
+    }
+    public toStartPosition(onComplete: () => void) {
+        gsap.to(this, {
+            x: window.innerWidth / 4,
+            y: window.innerHeight / 2,
+            width: birdConfig.w * 2,
+            height: birdConfig.h * 2,
+            rotation: 25,
+            duration: 0.6,
+            ease: 'back.out',
+            onComplete,
+        });
+    }
+    public toGamePosition(onComplete: () => void) {
+        gsap.to(this, {
+            x: birdConfig.x,
+            y: birdConfig.y,
+            width: birdConfig.w,
+            height: birdConfig.h,
+            rotation: 0,
+            duration: 0.6,
+            ease: 'back.out',
+            onComplete,
+        });
     }
 }
 

@@ -1,9 +1,9 @@
-import { Container, NineSliceSprite, Texture } from 'pixi.js';
+import { Container, Graphics } from 'pixi.js';
 import { emitter } from '../store/emitter';
 import gsap from 'gsap';
 
 export class CommonPopup extends Container {
-    private board: NineSliceSprite;
+    private board: Graphics;
     private toX: number;
     constructor() {
         super();
@@ -26,18 +26,12 @@ export class CommonPopup extends Container {
         this.toX = window.innerWidth / 2 - popWidth / 2;
         this.position.x = -3000;
         this.position.y = window.innerHeight / 2 - popHeight / 2;
-        this.board = new NineSliceSprite({
-            texture: Texture.from('popBg'),
-            topHeight: 55,
-            bottomHeight: 55,
-            leftWidth: 55,
-            rightWidth: 55,
-            width: popWidth,
-            height: popHeight,
-        });
+        this.board = new Graphics();
+        this.board.roundRect(0, 0, popWidth - 60, popHeight - 60, 30);
+        this.board.fill(0xfd6f90);
+        this.board.stroke({ width: 30, color: 0x84d0ff });
         this.addChild(this.board);
         this.visible = false;
-        // this.renderButton();
     }
     public show() {
         this.visible = true;
