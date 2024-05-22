@@ -2,6 +2,7 @@ import { Container, Sprite } from 'pixi.js';
 import { CommonButton } from '../ui/CommonButton';
 import { emitter } from '../store/emitter';
 import gsap from 'gsap';
+import { sfx } from '../utils/audio';
 class StartScreen extends Container {
     private title: Sprite;
     private startButton: CommonButton;
@@ -32,6 +33,7 @@ class StartScreen extends Container {
             height: 90,
             radius: 15,
             onPress: () => {
+                sfx.play('audio/click.wav');
                 this.hide();
                 this.onStartClick();
             },

@@ -5,6 +5,7 @@ import { CommonButton } from '../ui/CommonButton';
 import { CommonPopup } from '../ui/CommonPopup';
 import { Sprite, Text } from 'pixi.js';
 import { Layout } from '@pixi/layout';
+import { sfx } from '../utils/audio';
 
 export class FinishPopup extends CommonPopup {
     private point: number;
@@ -58,6 +59,7 @@ export class FinishPopup extends CommonPopup {
         this.button = new CommonButton({
             text: 'Again',
             onPress: () => {
+                sfx.play('audio/click.wav');
                 emitter.emit('onReset');
                 emitter.emit('finishPopupIsShow', false);
             },
@@ -66,6 +68,7 @@ export class FinishPopup extends CommonPopup {
         this.button2 = new CommonButton({
             text: 'Continue',
             onPress: () => {
+                sfx.play('audio/click.wav');
                 this.hide();
                 console.log('🚀 ~ FinishPopup ~ renderContent ~ type:');
             },
@@ -76,6 +79,7 @@ export class FinishPopup extends CommonPopup {
             width: 60,
             height: 60,
             onPress: () => {
+                sfx.play('audio/click.wav');
                 emitter.emit('onBack');
                 emitter.emit('finishPopupIsShow', false);
                 this.hide();

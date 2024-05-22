@@ -47,7 +47,7 @@ async function init() {
 
     app.stage.removeChild(loadScreen);
 
-    const startScreen = new StartScreen();
+    // const startScreen = new StartScreen();
     const gameScreen = new GameScreen();
 
     app.stage.addChild(gameScreen);

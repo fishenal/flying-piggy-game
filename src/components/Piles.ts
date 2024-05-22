@@ -4,6 +4,7 @@ import { emitter } from '../store/emitter';
 import { randomRange } from '../utils/random';
 import Bird from './Bird';
 import { scoreSingleton } from '../store/score';
+import { sfx } from '../utils/audio';
 
 class Pile extends Container {
     private randomPassPoint: number = 0;
@@ -127,9 +128,10 @@ class Piles extends Container {
     public onLoss() {
         emitter.emit('isPausedChange', true);
         emitter.emit('onLoss', true);
-        // app.stop();
+        sfx.play('audio/hit.wav');
     }
     public onPass() {
+        sfx.play('audio/pass.wav');
         scoreSingleton.count();
     }
 }

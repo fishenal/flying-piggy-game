@@ -6,6 +6,7 @@ import { Background, Cloud, Ground } from '../components/Background';
 import StartScreen from './StartScreen';
 import GameContainer from './GameContainer';
 import { birdConfig } from '../utils/config';
+import { sfx } from '../utils/audio';
 
 class GameScreen extends Container {
     private popupIsShow: boolean;
@@ -41,6 +42,7 @@ class GameScreen extends Container {
             if (this.popupIsShow) {
                 return;
             }
+            sfx.play('audio/swing.wav');
             emitter.emit('isPausedChange', false);
             this.bird.verSpeed = birdConfig.intSpeed;
         });
