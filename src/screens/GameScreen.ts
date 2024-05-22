@@ -3,7 +3,6 @@ import { emitter } from '../store/emitter';
 import Bird from '../components/Bird';
 import { FinishPopup } from '../components/FinishPopup';
 import { Background, Cloud, Ground } from '../components/Background';
-import { app } from '../main';
 import StartScreen from './StartScreen';
 import GameContainer from './GameContainer';
 import { birdConfig } from '../utils/config';
@@ -64,7 +63,6 @@ class GameScreen extends Container {
             this.bird.init();
             finishPopup.reset();
             finishPopup.hide();
-            app.start();
         });
 
         emitter.on('onBack', () => {

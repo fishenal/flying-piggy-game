@@ -1,4 +1,4 @@
-import { Container, Graphics, Sprite, Texture, Text } from 'pixi.js';
+import { Container, Sprite, Texture } from 'pixi.js';
 import { emitter } from '../store/emitter';
 
 import { scoreSingleton } from '../store/score';
