@@ -1,9 +1,10 @@
 import { FancyButton } from '@pixi/ui';
 import { Container, Graphics, Sprite, Text } from 'pixi.js';
 const args = {
-    color: '#A5E24D',
+    color: '#fd6f90',
+
     hoverColor: '#FEC230',
-    pressedColor: '#FE6048',
+    pressedColor: '0x84d0ff',
     disabledColor: '#6E6E6E',
     width: 200,
     height: 60,
@@ -30,7 +31,7 @@ const args = {
 export class CommonButton extends Container {
     constructor({
         text,
-        textColor = 0xffffff,
+        textColor = 0xc0dfff,
         icon,
         onPress,
     }: {
@@ -45,6 +46,7 @@ export class CommonButton extends Container {
             width,
             height,
             radius,
+            color,
             hoverColor,
             pressedColor,
             disabledColor,
@@ -66,7 +68,7 @@ export class CommonButton extends Container {
         } = args;
 
         const button = new FancyButton({
-            defaultView: new Graphics().roundRect(0, 0, width, height, radius).fill(0x84d0ff),
+            defaultView: new Graphics().roundRect(0, 0, width, height, radius).fill(color),
             hoverView: new Graphics().roundRect(0, 0, width, height, radius).fill(hoverColor),
             pressedView: new Graphics().roundRect(0, 0, width, height, radius).fill(pressedColor),
             disabledView: new Graphics().roundRect(0, 0, width, height, radius).fill(disabledColor),
@@ -75,6 +77,7 @@ export class CommonButton extends Container {
                 style: {
                     fill: textColor,
                     fontFamily: 'Shrikhand',
+                    fontSize: 55,
                 },
             }),
             padding,

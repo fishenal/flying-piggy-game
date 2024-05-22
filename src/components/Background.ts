@@ -1,37 +1,20 @@
 import { Container, Sprite, TilingSprite } from 'pixi.js';
-import { birdConfig, globalConfig } from '../utils/config';
+import { globalConfig } from '../utils/config';
 import { emitter } from '../store/emitter';
-import Bird from './Bird';
 import gsap from 'gsap';
 
 export class Background extends Container {
-    private bird: Bird;
     private bg: Sprite;
-    private popupIsShow: boolean;
-    constructor(bird: Bird) {
+    constructor() {
         super();
-        this.popupIsShow = false;
         emitter.on('onResize', ({ width, height }) => {
             this.bg.width = width;
             this.bg.height = height;
         });
-        emitter.on('finishPopupIsShow', (status) => {
-            this.popupIsShow = status;
-        });
-        this.bird = bird;
         this.bg = Sprite.from('bg');
-        this.bg.interactive = true;
         this.bg.width = window.innerWidth;
         this.bg.height = window.innerHeight - globalConfig.groundHeight;
-        this.bg.cursor = 'pointer';
         this.addChild(this.bg);
-        this.bg.on('pointerdown', () => {
-            if (this.popupIsShow) {
-                return;
-            }
-            emitter.emit('isPausedChange', false);
-            this.bird.verSpeed = birdConfig.intSpeed;
-        });
     }
 }
 
