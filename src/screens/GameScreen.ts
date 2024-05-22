@@ -7,6 +7,7 @@ import StartScreen from './StartScreen';
 import GameContainer from './GameContainer';
 import { birdConfig } from '../utils/config';
 import { sfx } from '../utils/audio';
+import { VolControl } from '../components/VolControl';
 
 class GameScreen extends Container {
     private popupIsShow: boolean;
@@ -30,7 +31,6 @@ class GameScreen extends Container {
         const background = new Background();
         const ground = new Ground();
         const cloud = new Cloud();
-
         const finishPopup = new FinishPopup();
         this.addChild(background);
         this.addChild(cloud);
@@ -57,8 +57,11 @@ class GameScreen extends Container {
         };
         this.addChild(startScreen);
 
-        this.addChild(finishPopup);
         this.addChild(this.bird);
+        this.addChild(finishPopup);
+
+        const volButton = new VolControl();
+        this.addChild(volButton);
 
         emitter.on('onReset', () => {
             emitter.emit('isPausedChange', true);

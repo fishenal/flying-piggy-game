@@ -7,6 +7,7 @@ class StartScreen extends Container {
     private title: Sprite;
     private startButton: CommonButton;
     private startButtonX: number;
+    private logo: Sprite;
     private outX: number;
     public onStartClick: () => void;
     constructor() {
@@ -19,6 +20,8 @@ class StartScreen extends Container {
             this.title.height = (width * 371) / 1954;
             this.title.y = height / 5;
             this.startButton.x = width / 2 + this.startButton.width / 2;
+            this.logo.x = width - 160;
+            this.logo.y = height - 130;
         });
         this.title.width = window.innerWidth;
         this.title.height = (window.innerWidth * 371) / 1954;
@@ -43,6 +46,13 @@ class StartScreen extends Container {
         this.startButton.x = this.outX;
         this.startButton.y = (window.innerHeight * 2) / 3;
         this.addChild(this.startButton);
+
+        this.logo = Sprite.from('fishenalLogo');
+        this.logo.width = 147;
+        this.logo.height = 107;
+        this.logo.x = window.innerWidth - 160;
+        this.logo.y = window.innerHeight - 130;
+        this.addChild(this.logo);
     }
     public show() {
         gsap.to(this.title, {
@@ -55,6 +65,7 @@ class StartScreen extends Container {
             duration: 0.8,
             ease: 'power2.out',
         });
+        this.logo.visible = true;
     }
     public hide() {
         gsap.to(this.title, {
@@ -67,6 +78,7 @@ class StartScreen extends Container {
             duration: 0.8,
             ease: 'power2.out',
         });
+        this.logo.visible = false;
     }
 }
 export default StartScreen;
