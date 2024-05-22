@@ -12,6 +12,17 @@ class Bird extends AnimatedSprite {
         emitter.on('isPausedChange', (status) => {
             this.isPaused = status;
         });
+        emitter.on('onLoss', (status) => {
+            if (status) {
+                this.onDie();
+            }
+        });
+        emitter.on('onReset', () => {
+            gsap.killTweensOf(this);
+        });
+        emitter.on('onBack', () => {
+            gsap.killTweensOf(this);
+        });
         this.animationSpeed = 0.1;
         this.play();
         this.anchor.x = 0.5;
@@ -66,6 +77,15 @@ class Bird extends AnimatedSprite {
             duration: 0.6,
             ease: 'back.out',
             onComplete,
+        });
+    }
+    private onDie() {
+        gsap.to(this, {
+            rotation: 16,
+            duration: 2,
+            repeatDelay: 0.5,
+            repeat: -1,
+            yoyo: true,
         });
     }
 }
