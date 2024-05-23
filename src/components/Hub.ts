@@ -5,13 +5,13 @@ import { scoreSingleton } from '../store/score';
 import { CommonBoard } from '../ui/CommonBoard';
 export class HandSign extends Sprite {
     constructor() {
-        super(Texture.from('hand'));
+        super(Texture.from('indicator'));
         emitter.on('isPausedChange', (status) => {
             this.visible = status;
         });
 
-        this.width = 127;
-        this.height = 184;
+        this.width = 100;
+        this.height = 100;
         this.position.x = 160;
         this.position.y = 350;
         this.visible = true;

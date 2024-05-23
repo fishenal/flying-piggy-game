@@ -8,6 +8,7 @@ import GameContainer from './GameContainer';
 import { birdConfig } from '../utils/config';
 import { bgm, sfx } from '../utils/audio';
 import { VolControl } from '../components/VolControl';
+import IndicatorCover from './IndicatorCover';
 
 class GameScreen extends Container {
     private popupIsShow: boolean;
@@ -48,12 +49,13 @@ class GameScreen extends Container {
             this.bird.verSpeed = birdConfig.intSpeed;
         });
         this.addChild(gameContainer);
-
+        const indicator = new IndicatorCover();
         const startScreen = new StartScreen();
         startScreen.show();
         startScreen.onStartClick = () => {
             this.bird.toGamePosition(() => {
                 gameContainer.piles.show();
+                indicator.show();
             });
         };
         this.addChild(startScreen);
@@ -63,6 +65,8 @@ class GameScreen extends Container {
 
         const volButton = new VolControl();
         this.addChild(volButton);
+
+        this.addChild(indicator);
 
         emitter.on('onReset', () => {
             emitter.emit('isPausedChange', true);
