@@ -5,6 +5,7 @@ import { randomRange } from '../utils/random';
 import Bird from './Bird';
 import { scoreSingleton } from '../store/score';
 import { sfx } from '../utils/audio';
+import gsap from 'gsap';
 
 class Pile extends Container {
     private randomPassPoint: number = 0;
@@ -70,15 +71,25 @@ class Piles extends Container {
     private bird: Bird;
     private initPileNum: number;
     private currentPileIdx: number;
+    private outX: number;
+    public onShowComplete: () => void = () => null;
+    public onHideComplete: () => void = () => null;
     constructor(bird: Bird) {
         super();
         emitter.on('isPausedChange', (status) => {
             this.isPaused = status;
         });
+        emitter.on('onReset', () => {
+            this.show();
+        });
+        emitter.on('onBack', () => {
+            this.hide();
+        });
+        this.outX = window.innerWidth + 2000;
         this.bird = bird;
         this.initPileNum = 0;
         this.currentPileIdx = 0;
-        this.init();
+        this.x = this.outX;
 
         this.onRender = () => {
             if (this.isPaused) {
@@ -122,8 +133,7 @@ class Piles extends Container {
             const p = new Pile(i);
             this.addChild(p);
         }
-
-        this.position.x = pileConfig.firstPileX;
+        this.x = this.outX;
     }
     public onLoss() {
         emitter.emit('isPausedChange', true);
@@ -133,6 +143,23 @@ class Piles extends Container {
     public onPass() {
         sfx.play('audio/pass.wav');
         scoreSingleton.count();
+    }
+    public show() {
+        this.init();
+        gsap.to(this, {
+            x: pileConfig.firstPileX,
+            duration: 1,
+            ease: 'power1.inOut',
+            onComplete: this.onShowComplete,
+        });
+    }
+    public hide() {
+        gsap.to(this, {
+            x: this.outX,
+            duration: 0.6,
+            ease: 'back.in',
+            onComplete: this.onHideComplete,
+        });
     }
 }
 export default Piles;

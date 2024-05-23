@@ -9,6 +9,7 @@ export class HandSign extends Sprite {
         emitter.on('isPausedChange', (status) => {
             this.visible = status;
         });
+
         this.width = 127;
         this.height = 184;
         this.position.x = 160;
@@ -35,6 +36,12 @@ export class ScoreBoard extends Container {
         });
         emitter.on('onResize', ({ width }) => {
             this.position.x = width / 2 + width / 2;
+        });
+        emitter.on('onReset', () => {
+            this.reset();
+        });
+        emitter.on('onBack', () => {
+            this.reset();
         });
         this.width = width;
         this.height = height;
