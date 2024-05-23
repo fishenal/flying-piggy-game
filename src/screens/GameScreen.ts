@@ -66,9 +66,7 @@ class GameScreen extends Container {
 
         emitter.on('onReset', () => {
             emitter.emit('isPausedChange', true);
-            this.bird.init();
-            finishPopup.reset();
-            finishPopup.hide();
+            this.bird.toGamePosition(() => {});
         });
 
         emitter.on('onBack', () => {

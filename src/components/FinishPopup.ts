@@ -3,7 +3,7 @@ import { scoreSingleton } from '../store/score';
 import { CommonBoard } from '../ui/CommonBoard';
 import { CommonButton } from '../ui/CommonButton';
 import { CommonPopup } from '../ui/CommonPopup';
-import { Sprite, Text } from 'pixi.js';
+import { Container, Sprite, Text } from 'pixi.js';
 import { Layout } from '@pixi/layout';
 import { sfx } from '../utils/audio';
 
@@ -27,35 +27,6 @@ export class FinishPopup extends CommonPopup {
         this.button2 = null;
         this.buttonBack = null;
         this.interactive = false;
-        this.onResize = ({ width, height }) => {
-            this.width = width;
-            this.height = height;
-            this.popLayout?.resize(width, height);
-        };
-        emitter.on('onLoss', (status) => {
-            if (status) {
-                this.reset();
-                this.renderContent();
-                this.show();
-                emitter.emit('finishPopupIsShow', true);
-            }
-        });
-        emitter.on('scoreChange', (score: number) => {
-            this.point = score;
-        });
-    }
-    public reset() {
-        if (this.popLayout) {
-            this.popLayout.destroy();
-        }
-    }
-    private renderContent() {
-        if (this.point > Number(this.hiScore)) {
-            scoreSingleton.updateHiScore(this.point);
-        }
-        this.scoreText = new CommonBoard({
-            label: String(this.point),
-        });
         this.button = new CommonButton({
             text: 'Again',
             onPress: () => {
@@ -69,8 +40,8 @@ export class FinishPopup extends CommonPopup {
             text: 'Continue',
             onPress: () => {
                 sfx.play('audio/click.wav');
-                this.hide();
-                console.log('🚀 ~ FinishPopup ~ renderContent ~ type:');
+                emitter.emit('onContinue');
+                emitter.emit('finishPopupIsShow', false);
             },
         });
 
@@ -82,8 +53,46 @@ export class FinishPopup extends CommonPopup {
                 sfx.play('audio/click.wav');
                 emitter.emit('onBack');
                 emitter.emit('finishPopupIsShow', false);
-                this.hide();
             },
+        });
+        this.onResize = ({ width, height }) => {
+            this.width = width;
+            this.height = height;
+            this.popLayout?.resize(width, height);
+        };
+
+        emitter.on('onLoss', (status) => {
+            if (status) {
+                this.renderContent();
+                this.show();
+                emitter.emit('finishPopupIsShow', true);
+            }
+        });
+        emitter.on('onReset', () => {
+            this.hide();
+        });
+        emitter.on('onBack', () => {
+            this.hide();
+        });
+        emitter.on('onContinue', () => {
+            this.hide();
+        });
+
+        emitter.on('scoreChange', (score: number) => {
+            this.point = score;
+        });
+    }
+
+    private renderContent() {
+        if (this.popLayout) {
+            this.removeChild(this.popLayout);
+        }
+
+        if (this.point > Number(this.hiScore)) {
+            scoreSingleton.updateHiScore(this.point);
+        }
+        this.scoreText = new CommonBoard({
+            label: String(this.point),
         });
 
         if (this.point > Number(this.hiScore)) {
@@ -101,7 +110,7 @@ export class FinishPopup extends CommonPopup {
             id: 'finishPopup',
             content: {
                 backButton: {
-                    content: this.buttonBack,
+                    content: this.buttonBack as Container,
                     styles: {
                         position: 'leftTop',
                         paddingTop: 50,
@@ -109,6 +118,7 @@ export class FinishPopup extends CommonPopup {
                     },
                 },
                 scoreText: {
+                    id: 'scoreText',
                     content: this.scoreText,
                     styles: {
                         position: 'centerTop',
@@ -149,10 +159,10 @@ export class FinishPopup extends CommonPopup {
                 button: {
                     content: [
                         {
-                            content: this.button,
+                            content: this.button as Container,
                         },
                         {
-                            content: this.button2,
+                            content: this.button2 as Container,
                             styles: {
                                 paddingLeft: 20,
                             },

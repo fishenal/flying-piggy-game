@@ -85,6 +85,10 @@ class Piles extends Container {
         emitter.on('onBack', () => {
             this.hide();
         });
+        emitter.on('onContinue', () => {
+            this.onContinuePlay();
+        });
+
         this.outX = window.innerWidth + 2000;
         this.bird = bird;
         this.initPileNum = 0;
@@ -123,7 +127,11 @@ class Piles extends Container {
             }
         };
     }
-
+    public onContinuePlay() {
+        this.removeChildAt(0);
+        this.addChild(new Pile(this.currentPileIdx));
+        this.currentPileIdx += 1;
+    }
     public init() {
         this.removeChildren();
         const voidWidth = window.innerWidth - birdConfig.w - birdConfig.x - pileConfig.pileGap;

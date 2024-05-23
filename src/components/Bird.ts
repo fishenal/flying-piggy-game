@@ -23,6 +23,10 @@ class Bird extends AnimatedSprite {
         emitter.on('onBack', () => {
             gsap.killTweensOf(this);
         });
+        emitter.on('onContinue', () => {
+            gsap.killTweensOf(this);
+            this.toGamePosition(() => {});
+        });
         this.animationSpeed = 0.1;
         this.play();
         this.anchor.x = 0.5;
