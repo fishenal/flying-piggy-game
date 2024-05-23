@@ -1,4 +1,5 @@
 import { Assets, AssetsManifest } from 'pixi.js';
+import { emitter } from '../store/emitter';
 
 /** List of assets grouped in bundles, for dynamic loading */
 let assetsManifest: AssetsManifest = { bundles: [] };
@@ -30,8 +31,15 @@ export async function loadBundles(bundles: string | string[]) {
 
     // Load bundles
     console.log('[Assets] Load:', loadList.join(', '));
-    await Assets.loadBundle(loadList);
+    await Assets.loadBundle(loadList, (e) => {
+        emitter.emit('progressChange', e);
+    });
 
+    // loader.addEventListener('onProgress', function (e) {
+    //     const percent = 1 - e.content.loadCount / e.content.assetURLs.length;
+    //     //here just gives me two values ​​[0.5 and 1]
+    //     console.log(percent);
+    // });
     // Append loaded bundles to the loaded list
     loadedBundles.push(...loadList);
 }
@@ -66,7 +74,6 @@ export async function initAssets() {
     console.log(assetsManifest);
     // Init PixiJS assets with this asset manifest
     await Assets.init({ manifest: assetsManifest, basePath: 'assets' });
-
     // Load assets for the load screen
     // await loadBundles('preload');
 
