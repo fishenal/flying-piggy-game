@@ -15,7 +15,7 @@ export class VolControl extends Container {
             setMasterVolume(100);
         } else {
             this.volStatus = volStatus === '1';
-            setMasterVolume(this.volStatus ? 100 : 0);
+            setMasterVolume(this.volStatus ? 0.5 : 0);
         }
 
         const volOff = Texture.from('volume_off');

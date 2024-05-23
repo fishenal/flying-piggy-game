@@ -6,7 +6,7 @@ import { Background, Cloud, Ground } from '../components/Background';
 import StartScreen from './StartScreen';
 import GameContainer from './GameContainer';
 import { birdConfig } from '../utils/config';
-import { sfx } from '../utils/audio';
+import { bgm, sfx } from '../utils/audio';
 import { VolControl } from '../components/VolControl';
 
 class GameScreen extends Container {
@@ -15,6 +15,7 @@ class GameScreen extends Container {
     constructor() {
         super();
         this.popupIsShow = false;
+        bgm.play('audio/piggybgm.mp3', { volume: 0.6 });
         emitter.on('finishPopupIsShow', (status) => {
             this.popupIsShow = status;
         });
@@ -52,7 +53,7 @@ class GameScreen extends Container {
         startScreen.show();
         startScreen.onStartClick = () => {
             this.bird.toGamePosition(() => {
-                gameContainer.show();
+                gameContainer.piles.show();
             });
         };
         this.addChild(startScreen);
@@ -71,7 +72,6 @@ class GameScreen extends Container {
         });
 
         emitter.on('onBack', () => {
-            gameContainer.hide();
             this.bird.toStartPosition(() => {
                 startScreen.show();
             });
