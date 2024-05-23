@@ -12,10 +12,10 @@ export class VolControl extends Container {
         if (volStatus === null) {
             this.volStatus = true;
             localStorage.setItem(volLsKey, this.volStatus ? '1' : '0');
-            setMasterVolume(100);
+            setMasterVolume(1);
         } else {
             this.volStatus = volStatus === '1';
-            setMasterVolume(this.volStatus ? 0.5 : 0);
+            setMasterVolume(this.volStatus ? 1 : 0);
         }
 
         const volOff = Texture.from('volume_off');
@@ -44,7 +44,7 @@ export class VolControl extends Container {
             if (this.volStatus) {
                 setMasterVolume(0);
             } else {
-                setMasterVolume(100);
+                setMasterVolume(1);
             }
 
             this.volStatus = !this.volStatus;
