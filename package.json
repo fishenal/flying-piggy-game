@@ -20,13 +20,10 @@
     "dependencies": {
         "@pixi/layout": "^2.0.1",
         "@pixi/sound": "^6.0.0",
-        "@pixi/spine-pixi": "^1.0.8",
         "@pixi/ui": "^2.0.1",
         "gsap": "^3.12.5",
         "nanoevents": "^9.0.0",
-        "pixi.js": "^8.1.1",
-        "stats.js": "^0.17.0",
-        "zustand": "^4.5.2"
+        "pixi.js": "^8.1.1"
     },
     "devDependencies": {
         "@assetpack/cli": "^0.8.0",

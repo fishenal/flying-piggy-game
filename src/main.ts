@@ -1,4 +1,3 @@
-import '@pixi/spine-pixi';
 import { Application } from 'pixi.js';
 import { initAssets } from './utils/assets';
 import GameScreen from './screens/GameScreen';
