@@ -20,9 +20,10 @@ class GameScreen extends Container {
         emitter.on('finishPopupIsShow', (status) => {
             this.popupIsShow = status;
         });
-        emitter.on('onResize', ({ width, height }) => {
+        emitter.on('onResize', ({ width }) => {
             this.bird.x = width / 4;
-            this.bird.height = height / 4;
+            // this.bird.width = width / 4;
+            // this.bird.height = height / 4;
         });
         this.bird = new Bird();
         this.bird.width = birdConfig.w * 2;
@@ -37,7 +38,6 @@ class GameScreen extends Container {
         this.addChild(background);
         this.addChild(cloud);
         this.addChild(ground);
-
         const gameContainer = new GameContainer(this.bird);
         gameContainer.eventMode = 'none';
         gameContainer.on('pointerdown', () => {

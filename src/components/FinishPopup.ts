@@ -55,11 +55,13 @@ export class FinishPopup extends CommonPopup {
                 emitter.emit('finishPopupIsShow', false);
             },
         });
-        this.onResize = ({ width, height }) => {
-            this.width = width;
-            this.height = height;
-            this.popLayout?.resize(width, height);
-        };
+        emitter.on('onResize', ({ width, height }) => {
+            this.popLayout?.resize(width / 1.5, height / 1.5);
+            if (this.mood) {
+                this.mood.width = (height / 6) * 1.24;
+                this.mood.height = height / 6;
+            }
+        });
 
         emitter.on('onLoss', (status) => {
             if (status) {
@@ -103,8 +105,8 @@ export class FinishPopup extends CommonPopup {
             this.mood = Sprite.from('fly_piggy1');
         }
 
-        this.mood.width = 200;
-        this.mood.height = 200 / 1.24;
+        this.mood.width = (this.height / 4) * 1.24;
+        this.mood.height = this.height / 4;
 
         this.popLayout = new Layout({
             id: 'finishPopup',
@@ -123,7 +125,7 @@ export class FinishPopup extends CommonPopup {
                     styles: {
                         position: 'centerTop',
                         height: '20%',
-                        paddingTop: 50,
+                        paddingTop: 25,
                         paddingLeft: 100,
                     },
                 },
@@ -171,12 +173,12 @@ export class FinishPopup extends CommonPopup {
                     styles: {
                         position: 'centerBottom',
                         paddingLeft: 190,
-                        height: '15%',
+                        height: '25%',
                     },
                 },
             },
             styles: {
-                padding: 150,
+                padding: this.height / 12,
                 width: '100%',
                 height: '100%',
             },

@@ -17,7 +17,6 @@ export class CommonPopup extends Container {
             this.position.y = height / 2 - popHeight / 2;
             this.board.width = popWidth;
             this.board.height = popHeight;
-            this.onResize({ width: popWidth, height: popHeight });
         });
         const popWidth = window.innerWidth / 1.5;
         const popHeight = window.innerHeight / 1.5;
@@ -52,5 +51,4 @@ export class CommonPopup extends Container {
             },
         });
     }
-    public onResize(_param: { width: number; height: number }) {}
 }

@@ -30,17 +30,17 @@ export class VolControl extends Container {
         this.volButton.eventMode = 'static';
         this.volButton.cursor = 'pointer';
         this.volButton.alpha = 0.8;
-        this.volButton.onmouseenter = () => {
+        this.volButton.on('mouseenter', () => {
             this.volButton.y -= 5;
             this.volButton.alpha = 1;
-        };
+        });
 
-        this.volButton.onmouseleave = () => {
+        this.volButton.on('mouseleave', () => {
             this.volButton.y += 5;
             this.volButton.alpha = 0.8;
-        };
+        });
 
-        this.volButton.onclick = () => {
+        this.volButton.on('pointerdown', () => {
             if (this.volStatus) {
                 setMasterVolume(0);
             } else {
@@ -50,7 +50,7 @@ export class VolControl extends Container {
             this.volStatus = !this.volStatus;
             localStorage.setItem(volLsKey, this.volStatus ? '1' : '0');
             this.volButton.texture = this.volStatus ? volOff : volUp;
-        };
+        });
 
         this.addChild(this.volButton);
         emitter.on('onResize', ({ height }) => {

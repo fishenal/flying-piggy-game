@@ -9,11 +9,15 @@ export class HandSign extends Sprite {
         emitter.on('isPausedChange', (status) => {
             this.visible = status;
         });
-
+        emitter.on('onResize', ({ height }) => {
+            this.position.y = height / 4 + 150;
+            // this.bird.width = width / 4;
+            // this.bird.height = height / 4;
+        });
         this.width = 100;
         this.height = 100;
         this.position.x = 160;
-        this.position.y = 350;
+        this.position.y = window.innerHeight / 4 + 150;
         this.visible = true;
     }
 }
@@ -35,7 +39,7 @@ export class ScoreBoard extends Container {
             });
         });
         emitter.on('onResize', ({ width }) => {
-            this.position.x = width / 2 + width / 2;
+            this.position.x = width / 2 + this.width / 2;
         });
         emitter.on('onReset', () => {
             this.reset();

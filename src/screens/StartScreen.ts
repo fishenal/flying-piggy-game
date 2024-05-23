@@ -55,6 +55,7 @@ class StartScreen extends Container {
         this.addChild(this.logo);
     }
     public show() {
+        this.startButton.visible = true;
         gsap.to(this.title, {
             x: 0,
             duration: 0.6,
@@ -65,6 +66,7 @@ class StartScreen extends Container {
             duration: 0.8,
             ease: 'power2.out',
         });
+
         this.logo.visible = true;
     }
     public hide() {
@@ -77,7 +79,11 @@ class StartScreen extends Container {
             x: this.outX * -1,
             duration: 0.8,
             ease: 'power2.out',
+            onComplete: () => {
+                this.startButton.visible = false;
+            },
         });
+
         this.logo.visible = false;
     }
 }

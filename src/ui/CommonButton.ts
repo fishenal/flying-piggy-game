@@ -29,6 +29,7 @@ const args = {
     },
 };
 export class CommonButton extends Container {
+    public button: FancyButton;
     constructor({
         text,
         textColor = 0xc0dfff,
@@ -70,7 +71,7 @@ export class CommonButton extends Container {
             animationDuration,
         } = args;
 
-        const button = new FancyButton({
+        this.button = new FancyButton({
             defaultView: new Graphics().roundRect(0, 0, width, height, radius).fill(color),
             hoverView: new Graphics().roundRect(0, 0, width, height, radius).fill(hoverColor),
             pressedView: new Graphics().roundRect(0, 0, width, height, radius).fill(pressedColor),
@@ -127,17 +128,17 @@ export class CommonButton extends Container {
         });
 
         if (disabled) {
-            button.enabled = false;
+            this.button.enabled = false;
         }
 
-        button.anchor.set(anchorX, anchorY);
-        button.onPress.connect(onPress);
-        // button.onDown.connect(() => action('onDown'));
-        // button.onUp.connect(() => action('onUp'));
-        // button.onHover.connect(() => action('onHover'));
-        // button.onOut.connect(() => action('onOut'));
-        // button.onUpOut.connect(() => action('onUpOut'));
-        // button.interactive = true;
-        this.addChild(button);
+        this.button.anchor.set(anchorX, anchorY);
+        this.button.onPress.connect(onPress);
+        // this.button.onDown.connect(() => action('onDown'));
+        // this.button.onUp.connect(() => action('onUp'));
+        // this.button.onHover.connect(() => action('onHover'));
+        // this.button.onOut.connect(() => action('onOut'));
+        // this.button.onUpOut.connect(() => action('onUpOut'));
+        // this.button.interactive = true;
+        this.addChild(this.button);
     }
 }

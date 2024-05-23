@@ -27,6 +27,8 @@ class IndicatorCover extends Container {
                 fontSize: 60,
             },
         });
+        this.info.width = window.innerWidth / 2;
+        this.info.height = (window.innerWidth / 2) * 0.3;
         this.info.x = 300;
         this.info.y = window.innerHeight / 2;
         this.addChild(this.cover);
@@ -43,6 +45,8 @@ class IndicatorCover extends Container {
             this.cover.height = height;
             this.indicator.y = height / 2;
             this.info.y = height / 2;
+            this.info.width = width / 2;
+            this.info.height = (width / 2) * 0.3;
         });
     }
     public show() {
