@@ -3,7 +3,7 @@ import { scoreSingleton } from '../store/score';
 import { CommonBoard } from '../ui/CommonBoard';
 import { CommonButton } from '../ui/CommonButton';
 import { CommonPopup } from '../ui/CommonPopup';
-import { Sprite, Text } from 'pixi.js';
+import { Container, Sprite, Text } from 'pixi.js';
 import { sfx } from '../utils/audio';
 
 export class FinishPopup extends CommonPopup {
@@ -15,6 +15,7 @@ export class FinishPopup extends CommonPopup {
     private button2: CommonButton | null;
     private buttonBack: CommonButton | null;
     private continueTimes: number = 1;
+    private container: Container;
     constructor() {
         super();
         this.point = 0;
@@ -25,18 +26,17 @@ export class FinishPopup extends CommonPopup {
         this.button2 = null;
         this.buttonBack = null;
         this.interactive = false;
+        this.container = new Container();
 
-        // emitter.on('onResize', ({ width, height }) => {
-        //     // this.popLayout?.resize(width, height);
-        //     // if (this.mood) {
-        //     //     this.mood.width = (height / 6) * 1.24;
-        //     //     this.mood.height = height / 6;
-        //     // }
-        //     // this.renderContent();
-        // });
+        this.addChild(this.container);
+        emitter.on('onResize', () => {
+            this.container.removeChildren();
+            this.renderContent();
+        });
 
         emitter.on('onLoss', (status) => {
             if (status) {
+                this.container.removeChildren();
                 this.renderContent();
                 this.show();
                 emitter.emit('finishPopupIsShow', true);
@@ -174,11 +174,11 @@ export class FinishPopup extends CommonPopup {
         this.hiScore.y = this.height / 1.6;
         this.hiScore.x = this.width / 2 - this.hiScore.width / 2;
 
-        this.addChild(this.buttonBack);
-        this.addChild(this.scoreText);
-        this.addChild(this.mood);
-        this.addChild(this.hiScore);
-        this.addChild(this.button);
-        this.addChild(this.button2);
+        this.container.addChild(this.buttonBack);
+        this.container.addChild(this.scoreText);
+        this.container.addChild(this.mood);
+        this.container.addChild(this.hiScore);
+        this.container.addChild(this.button);
+        this.container.addChild(this.button2);
     }
 }
