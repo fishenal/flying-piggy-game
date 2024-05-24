@@ -29,10 +29,10 @@ export class FinishPopup extends CommonPopup {
         this.container = new Container();
 
         this.addChild(this.container);
-        emitter.on('onResize', () => {
-            this.container.removeChildren();
-            this.renderContent();
-        });
+        // emitter.on('onResize', () => {
+        //     this.container.removeChildren();
+        //     this.renderContent();
+        // });
 
         emitter.on('onLoss', (status) => {
             if (status) {
