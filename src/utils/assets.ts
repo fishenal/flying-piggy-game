@@ -34,12 +34,6 @@ export async function loadBundles(bundles: string | string[]) {
     await Assets.loadBundle(loadList, (e) => {
         emitter.emit('progressChange', e);
     });
-
-    // loader.addEventListener('onProgress', function (e) {
-    //     const percent = 1 - e.content.loadCount / e.content.assetURLs.length;
-    //     //here just gives me two values ​​[0.5 and 1]
-    //     console.log(percent);
-    // });
     // Append loaded bundles to the loaded list
     loadedBundles.push(...loadList);
 }
