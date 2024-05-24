@@ -4,6 +4,12 @@ import GameScreen from './screens/GameScreen';
 import LoadScreen from './screens/LoadScreen';
 import { emitter } from './store/emitter';
 
+declare global {
+    interface Window {
+        CrazyGames: any;
+    }
+}
+
 /** The PixiJS app Application instance, shared across the project */
 export const app = new Application();
 
@@ -42,6 +48,7 @@ async function init() {
     app.stage.addChild(loadScreen);
     // Setup assets bundles (see assets.ts) and start up loading everything in background
     await initAssets();
+    await window.CrazyGames.SDK.init();
 
     app.stage.removeChild(loadScreen);
 

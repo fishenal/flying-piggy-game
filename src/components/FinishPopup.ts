@@ -9,7 +9,6 @@ import { sfx } from '../utils/audio';
 
 export class FinishPopup extends CommonPopup {
     private point: number;
-    private hiScore: string;
     private mood: Sprite | null;
     private popLayout: Layout | null;
     private scoreText: CommonBoard | null;
@@ -19,7 +18,6 @@ export class FinishPopup extends CommonPopup {
     constructor() {
         super();
         this.point = 0;
-        this.hiScore = scoreSingleton.hiScore;
         this.mood = null;
         this.popLayout = null;
         this.scoreText = null;
@@ -67,6 +65,7 @@ export class FinishPopup extends CommonPopup {
             if (status) {
                 this.renderContent();
                 this.show();
+
                 emitter.emit('finishPopupIsShow', true);
             }
         });
@@ -89,17 +88,21 @@ export class FinishPopup extends CommonPopup {
         if (this.popLayout) {
             this.removeChild(this.popLayout);
         }
-
-        if (this.point > Number(this.hiScore)) {
+        if (this.point > Number(scoreSingleton.hiScore)) {
+            try {
+                window?.CrazyGames.SDK.game.happytime();
+            } catch (err) {
+                console.log('crazy fun time error', err);
+            }
             scoreSingleton.updateHiScore(this.point);
         }
         this.scoreText = new CommonBoard({
             label: String(this.point),
         });
 
-        if (this.point > Number(this.hiScore)) {
+        if (this.point > Number(scoreSingleton.hiScore)) {
             this.mood = Sprite.from('fly_piggy_win');
-        } else if (this.point < Number(this.hiScore) / 2) {
+        } else if (this.point < Number(scoreSingleton.hiScore) / 2) {
             this.mood = Sprite.from('fly_piggy3');
         } else {
             this.mood = Sprite.from('fly_piggy1');

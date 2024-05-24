@@ -9,6 +9,7 @@ import { birdConfig } from '../utils/config';
 import { bgm, sfx } from '../utils/audio';
 import { VolControl } from '../components/VolControl';
 import IndicatorCover from './IndicatorCover';
+import { scoreSingleton } from '../store/score';
 
 class GameScreen extends Container {
     private popupIsShow: boolean;
@@ -25,6 +26,7 @@ class GameScreen extends Container {
             // this.bird.width = width / 4;
             // this.bird.height = height / 4;
         });
+        scoreSingleton.init();
         this.bird = new Bird();
         this.bird.width = birdConfig.w * 2;
         this.bird.height = birdConfig.h * 2;
