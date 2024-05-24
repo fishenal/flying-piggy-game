@@ -15,6 +15,7 @@ export class FinishPopup extends CommonPopup {
     private button: CommonButton | null;
     private button2: CommonButton | null;
     private buttonBack: CommonButton | null;
+    private continueTimes: number = 1;
     constructor() {
         super();
         this.point = 0;
@@ -25,23 +26,6 @@ export class FinishPopup extends CommonPopup {
         this.button2 = null;
         this.buttonBack = null;
         this.interactive = false;
-        this.button = new CommonButton({
-            text: 'Again',
-            onPress: () => {
-                sfx.play('audio/click.wav');
-                emitter.emit('onReset');
-                emitter.emit('finishPopupIsShow', false);
-            },
-        });
-
-        this.button2 = new CommonButton({
-            text: 'Continue',
-            onPress: () => {
-                sfx.play('audio/click.wav');
-                emitter.emit('onContinue');
-                emitter.emit('finishPopupIsShow', false);
-            },
-        });
 
         this.buttonBack = new CommonButton({
             text: '<',
@@ -65,15 +49,16 @@ export class FinishPopup extends CommonPopup {
             if (status) {
                 this.renderContent();
                 this.show();
-
                 emitter.emit('finishPopupIsShow', true);
             }
         });
         emitter.on('onReset', () => {
             this.hide();
+            this.continueTimes = 1;
         });
         emitter.on('onBack', () => {
             this.hide();
+            this.continueTimes = 1;
         });
         emitter.on('onContinue', () => {
             this.hide();
@@ -83,7 +68,40 @@ export class FinishPopup extends CommonPopup {
             this.point = score;
         });
     }
+    private againPlay() {
+        emitter.emit('onReset');
+        emitter.emit('finishPopupIsShow', false);
+    }
 
+    private continuePlay() {
+        emitter.emit('onContinue');
+        emitter.emit('finishPopupIsShow', false);
+    }
+
+    private onContinueClick() {
+        sfx.play('audio/click.wav');
+        if (this.continueTimes > 0) {
+            this.continuePlay();
+            this.continueTimes -= 1;
+        } else {
+            try {
+                const callbacks = {
+                    adFinished: () => {
+                        console.log('End rewarded ad');
+                        this.continuePlay();
+                    },
+                    adError: (error: unknown) => {
+                        console.log('Error rewarded ad', error);
+                        this.againPlay();
+                    },
+                };
+                window.CrazyGames.SDK.ad.requestAd('rewarded', callbacks);
+            } catch (error) {
+                console.log('Error rewarded ad', error);
+                this.againPlay();
+            }
+        }
+    }
     private renderContent() {
         if (this.popLayout) {
             this.removeChild(this.popLayout);
@@ -98,6 +116,21 @@ export class FinishPopup extends CommonPopup {
         }
         this.scoreText = new CommonBoard({
             label: String(this.point),
+        });
+
+        this.button = new CommonButton({
+            text: 'Again',
+            onPress: () => {
+                sfx.play('audio/click.wav');
+                this.againPlay();
+            },
+        });
+        const continueText = this.continueTimes === 0 ? 'Continue(🎞️)' : `Continue(${this.continueTimes})`;
+        this.button2 = new CommonButton({
+            text: continueText,
+            onPress: () => {
+                this.onContinueClick();
+            },
         });
 
         if (this.point > Number(scoreSingleton.hiScore)) {
