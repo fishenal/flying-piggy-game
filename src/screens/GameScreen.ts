@@ -5,7 +5,7 @@ import { FinishPopup } from '../components/FinishPopup';
 import { Background, Cloud, Ground } from '../components/Background';
 import StartScreen from './StartScreen';
 import GameContainer from './GameContainer';
-import { birdConfig } from '../utils/config';
+import { getBirdConfig } from '../utils/config';
 import { bgm, sfx } from '../utils/audio';
 import { VolControl } from '../components/VolControl';
 import IndicatorCover from './IndicatorCover';
@@ -21,18 +21,16 @@ class GameScreen extends Container {
         emitter.on('finishPopupIsShow', (status) => {
             this.popupIsShow = status;
         });
-        emitter.on('onResize', ({ width }) => {
-            this.bird.x = width / 4;
-            // this.bird.width = width / 4;
-            // this.bird.height = height / 4;
+        emitter.on('onResize', () => {
+            if (this.bird.status === 'start') {
+                this.bird.toStartPosition(() => {});
+            } else {
+                this.bird.toGamePosition(() => {});
+            }
         });
         scoreSingleton.init();
         this.bird = new Bird();
-        this.bird.width = birdConfig.w * 2;
-        this.bird.height = birdConfig.h * 2;
-        this.bird.x = window.innerWidth / 4;
-        this.bird.y = window.innerHeight / 2;
-        this.bird.rotation = 25;
+
         const background = new Background();
         const ground = new Ground();
         const cloud = new Cloud();
@@ -48,7 +46,7 @@ class GameScreen extends Container {
             }
             sfx.play('audio/swing.wav');
             emitter.emit('isPausedChange', false);
-            this.bird.verSpeed = birdConfig.intSpeed;
+            this.bird.verSpeed = getBirdConfig().intSpeed;
         });
         this.addChild(gameContainer);
         const indicator = new IndicatorCover();
@@ -59,6 +57,7 @@ class GameScreen extends Container {
                 gameContainer.piles.show();
                 indicator.show();
             });
+            startScreen.hide();
         };
         this.addChild(startScreen);
 

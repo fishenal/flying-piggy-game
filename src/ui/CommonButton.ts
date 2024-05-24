@@ -1,5 +1,5 @@
 import { FancyButton } from '@pixi/ui';
-import { Container, Graphics, Sprite, Text } from 'pixi.js';
+import { Graphics, Sprite, Text } from 'pixi.js';
 const args = {
     color: '#fd6f90',
 
@@ -28,8 +28,7 @@ const args = {
         console.log('on action');
     },
 };
-export class CommonButton extends Container {
-    public button: FancyButton;
+export class CommonButton extends FancyButton {
     constructor({
         text,
         textColor = 0xc0dfff,
@@ -47,8 +46,6 @@ export class CommonButton extends Container {
         icon?: Sprite;
         onPress: () => void;
     }) {
-        super();
-
         const {
             color,
             hoverColor,
@@ -71,7 +68,7 @@ export class CommonButton extends Container {
             animationDuration,
         } = args;
 
-        this.button = new FancyButton({
+        super({
             defaultView: new Graphics().roundRect(0, 0, width, height, radius).fill(color),
             hoverView: new Graphics().roundRect(0, 0, width, height, radius).fill(hoverColor),
             pressedView: new Graphics().roundRect(0, 0, width, height, radius).fill(pressedColor),
@@ -128,17 +125,16 @@ export class CommonButton extends Container {
         });
 
         if (disabled) {
-            this.button.enabled = false;
+            this.enabled = false;
         }
 
-        this.button.anchor.set(anchorX, anchorY);
-        this.button.onPress.connect(onPress);
-        // this.button.onDown.connect(() => action('onDown'));
-        // this.button.onUp.connect(() => action('onUp'));
-        // this.button.onHover.connect(() => action('onHover'));
-        // this.button.onOut.connect(() => action('onOut'));
-        // this.button.onUpOut.connect(() => action('onUpOut'));
-        // this.button.interactive = true;
-        this.addChild(this.button);
+        this.anchor.set(anchorX, anchorY);
+        this.onPress.connect(onPress);
+        // this.onDown.connect(() => action('onDown'));
+        // this.onUp.connect(() => action('onUp'));
+        // this.onHover.connect(() => action('onHover'));
+        // this.onOut.connect(() => action('onOut'));
+        // this.onUpOut.connect(() => action('onUpOut'));
+        // this.interactive = true;
     }
 }

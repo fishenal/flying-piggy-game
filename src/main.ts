@@ -18,8 +18,8 @@ export const app = new Application();
 function resize() {
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
-    const minWidth = 1024;
-    const minHeight = 768;
+    const minWidth = 920;
+    const minHeight = 480;
 
     // Calculate renderer and canvas sizes based on current dimensions
     const scaleX = windowWidth < minWidth ? minWidth / windowWidth : 1;
@@ -49,7 +49,7 @@ async function init() {
     });
 
     window.addEventListener('resize', resize);
-    resize();
+
     // Add pixi canvas element (app.canvas) to the document's body
     document.body.appendChild(app.canvas);
 
@@ -64,6 +64,7 @@ async function init() {
     const gameScreen = new GameScreen();
 
     app.stage.addChild(gameScreen);
+    resize();
 }
 
 // Init everything

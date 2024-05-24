@@ -9,15 +9,13 @@ export class HandSign extends Sprite {
         emitter.on('isPausedChange', (status) => {
             this.visible = status;
         });
-        emitter.on('onResize', ({ height }) => {
-            this.position.y = height / 4 + 150;
-            // this.bird.width = width / 4;
-            // this.bird.height = height / 4;
+        emitter.on('onResize', ({ width, height }) => {
+            this.position.y = height / 3;
+            this.width = width / 12;
+            this.height = width / 12;
+            this.position.x = width / 6;
         });
-        this.width = 100;
-        this.height = 100;
-        this.position.x = 160;
-        this.position.y = window.innerHeight / 4 + 150;
+
         this.visible = true;
     }
 }

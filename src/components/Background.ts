@@ -37,8 +37,6 @@ export class Background extends Container {
         });
 
         this.bg = new Sprite(bg1);
-        this.bg.width = window.innerWidth;
-        this.bg.height = window.innerHeight - globalConfig.groundHeight;
         this.addChild(this.bg);
     }
 }
@@ -49,14 +47,12 @@ export class Ground extends Container {
     constructor() {
         super();
         emitter.on('onResize', ({ width, height }) => {
-            this.ground.y = height - globalConfig.groundHeight - 40;
+            this.ground.y = (height * 4.2) / 5;
             this.ground.width = width;
+            this.ground.height = height / 6;
         });
         this.ground = TilingSprite.from('ground', {
-            width: window.innerWidth,
-            height: globalConfig.groundHeight + 40,
             x: 0,
-            y: window.innerHeight - globalConfig.groundHeight - 40,
             tileScale: { x: 0.5, y: 0.5 },
         });
         this.ground.onRender = () => {
@@ -94,15 +90,13 @@ export class Cloud extends Container {
 
         emitter.on('onResize', ({ width, height }) => {
             this.cloud.width = width;
-            this.cloud.y = height - globalConfig.groundHeight - 150;
+            this.cloud.y = (height * 3.6) / 5;
+            this.cloud.height = height / 3;
             this.flow();
         });
         this.cloud = new TilingSprite({
             texture: cloud1,
-            width: window.innerWidth,
-            height: 195,
             x: 0,
-            y: window.innerHeight - globalConfig.groundHeight - 150,
             tileScale: { x: 0.5, y: 0.5 },
         });
         this.flow();

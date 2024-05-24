@@ -43,6 +43,7 @@ export class FinishPopup extends CommonPopup {
                 this.mood.width = (height / 6) * 1.24;
                 this.mood.height = height / 6;
             }
+            this.renderContent();
         });
 
         emitter.on('onLoss', (status) => {
@@ -107,12 +108,12 @@ export class FinishPopup extends CommonPopup {
             this.removeChild(this.popLayout);
         }
         if (this.point > Number(scoreSingleton.hiScore)) {
+            scoreSingleton.updateHiScore(this.point);
             try {
                 window?.CrazyGames.SDK.game.happytime();
             } catch (err) {
                 console.log('crazy fun time error', err);
             }
-            scoreSingleton.updateHiScore(this.point);
         }
         this.scoreText = new CommonBoard({
             label: String(this.point),
@@ -166,32 +167,23 @@ export class FinishPopup extends CommonPopup {
                     },
                 },
                 mood: {
-                    content: [
-                        {
-                            content: this.mood,
-                            styles: {
-                                position: 'centerTop',
-                                height: '50%',
-                            },
-                        },
-                        {
-                            content: new Text({
-                                text: `HighScore: ${scoreSingleton.hiScore}`,
-                                style: {
-                                    fontFamily: 'Shrikhand',
-                                    fill: 0xffffff,
-                                },
-                            }),
-                            styles: {
-                                position: 'centerBottom',
-                                height: '50%',
-                            },
-                        },
-                    ],
+                    content: this.mood,
                     styles: {
                         position: 'center',
                         height: '50%',
-                        aspectRatio: 'flex',
+                    },
+                },
+                hiScore: {
+                    content: new Text({
+                        text: `HighScore: ${scoreSingleton.hiScore}`,
+                        style: {
+                            fontFamily: 'Shrikhand',
+                            fill: 0xffffff,
+                        },
+                    }),
+                    styles: {
+                        position: 'center',
+                        paddingTop: 30,
                     },
                 },
                 button: {
@@ -214,7 +206,7 @@ export class FinishPopup extends CommonPopup {
                 },
             },
             styles: {
-                padding: this.height / 12,
+                padding: this.height / 25,
                 width: '100%',
                 height: '100%',
             },

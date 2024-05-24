@@ -7,9 +7,10 @@ export class CommonPopup extends Container {
     private toX: number;
     constructor() {
         super();
+        this.toX = window.innerWidth / 2;
         emitter.on('onResize', ({ width, height }) => {
-            const popWidth = width / 1.5;
-            const popHeight = height / 1.5;
+            const popWidth = width / 1.2;
+            const popHeight = height / 1.2;
             this.width = popWidth;
             this.height = popHeight;
             this.toX = width / 2 - popWidth / 2;
@@ -18,15 +19,8 @@ export class CommonPopup extends Container {
             this.board.width = popWidth;
             this.board.height = popHeight;
         });
-        const popWidth = window.innerWidth / 1.5;
-        const popHeight = window.innerHeight / 1.5;
-        this.width = popWidth;
-        this.height = popHeight;
-        this.toX = window.innerWidth / 2 - popWidth / 2;
-        this.position.x = -3000;
-        this.position.y = window.innerHeight / 2 - popHeight / 2;
         this.board = new Graphics();
-        this.board.roundRect(0, 0, popWidth - 60, popHeight - 60, 30);
+        this.board.roundRect(0, 0, window.innerWidth / 1.2, window.innerHeight / 1.2, 30);
         this.board.fill(0xfd6f90);
         this.board.stroke({ width: 30, color: 0x84d0ff });
         this.addChild(this.board);
