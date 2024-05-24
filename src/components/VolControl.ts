@@ -17,7 +17,12 @@ export class VolControl extends Container {
             this.volStatus = volStatus === '1';
             setMasterVolume(this.volStatus ? 1 : 0);
         }
-
+        emitter.on('mute', () => {
+            setMasterVolume(0);
+        });
+        emitter.on('recoverMute', () => {
+            setMasterVolume(this.volStatus ? 1 : 0);
+        });
         const volOff = Texture.from('volume_off');
         const volUp = Texture.from('volume_up');
         this.width = 60;
