@@ -6,6 +6,7 @@ import gsap from 'gsap';
 class Bird extends AnimatedSprite {
     private isPaused: boolean = true;
     public verSpeed: number;
+    public downRate: number;
     public status: 'start' | 'game' = 'start';
     public size: {
         x: number;
@@ -50,6 +51,8 @@ class Bird extends AnimatedSprite {
             if (this.status === 'start') {
                 this.toStartPosition(() => {});
             }
+            this.verSpeed = getBirdConfig().intSpeed;
+            this.downRate = getBirdConfig().downRate;
         });
 
         this.animationSpeed = 0.1;
@@ -58,10 +61,11 @@ class Bird extends AnimatedSprite {
         this.anchor.y = 0.5;
         this.rotation = 0;
         this.verSpeed = getBirdConfig().intSpeed;
+        this.downRate = getBirdConfig().downRate;
         this.onRender = () => {
             if (this.isPaused) return;
             this.position.y -= this.verSpeed;
-            this.verSpeed -= birdConfig.downRate;
+            this.verSpeed -= this.downRate;
             if (this.verSpeed > -3) {
                 if (this.rotation < -Math.PI / 8) {
                     this.rotation = -Math.PI / 8;
