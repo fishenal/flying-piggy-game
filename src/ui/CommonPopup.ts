@@ -4,32 +4,39 @@ import gsap from 'gsap';
 
 export class CommonPopup extends Container {
     private board: Graphics;
-    private toX: number;
+    private outX: number;
     constructor() {
         super();
-        this.toX = window.innerWidth / 2;
+        this.outX = window.innerWidth + 2000;
+
+        const width = window.innerWidth / 1.2;
+        this.width = width;
+        const height = window.innerHeight / 1.2;
+        this.height = height;
+        this.pivot.x = width / 2;
+        this.pivot.y = height / 2;
         emitter.on('onResize', ({ width, height }) => {
-            const popWidth = width / 1.2;
-            const popHeight = height / 1.2;
-            this.width = popWidth;
-            this.height = popHeight;
-            this.toX = width / 2 - popWidth / 2;
-            this.position.x = width / 2 - popWidth / 2;
-            this.position.y = height / 2 - popHeight / 2;
-            this.board.width = popWidth;
-            this.board.height = popHeight;
+            const _width = width / 1.2;
+            this.width = _width;
+            const _height = height / 1.2;
+            this.height = _height;
+            if (this.visible) {
+                this.show();
+            }
         });
         this.board = new Graphics();
-        this.board.roundRect(0, 0, window.innerWidth / 1.2, window.innerHeight / 1.2, 30);
+        this.board.roundRect(0, 0, width, height, 30);
         this.board.fill(0xfd6f90);
         this.board.stroke({ width: 30, color: 0x84d0ff });
         this.addChild(this.board);
+        this.position.x = this.outX;
         this.visible = false;
     }
     public show() {
         this.visible = true;
         gsap.to(this, {
-            x: this.toX,
+            x: window.innerWidth / 2,
+            y: window.innerHeight / 2,
             duration: 0.5,
             ease: 'power2.inOut',
         });
