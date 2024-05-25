@@ -58,7 +58,7 @@ export class FinishPopup extends CommonPopup {
 
         this.button.width = this.width / 4;
         this.button.height = (this.width / 4) * 0.3;
-        this.button.y = (this.height * 5) / 6;
+        this.button.y = this.height * 0.8;
         this.button.x = this.width / 4;
 
         this.button2 = new CommonButton({
@@ -69,7 +69,7 @@ export class FinishPopup extends CommonPopup {
         });
         this.button2.width = this.width / 4;
         this.button2.height = (this.width / 4) * 0.3;
-        this.button2.y = (this.height * 5) / 6;
+        this.button2.y = this.height * 0.8;
         this.button2.x = (this.width * 3) / 4;
 
         this.mood = new Sprite(this.moodTexture[0]);
