@@ -6,7 +6,9 @@ import { sfx } from '../utils/audio';
 class StartScreen extends Container {
     private title: Sprite;
     private startButton: CommonButton;
-    private logo: Sprite;
+    // private logo: Sprite;
+    // private cLogo: Sprite;
+    private logoContainer: Container;
     private outX: number;
     public onStartClick: () => void;
     constructor() {
@@ -21,8 +23,8 @@ class StartScreen extends Container {
             this.startButton.width = width / 4;
             this.startButton.height = this.startButton.width / 3;
             this.startButton.y = (height * 2) / 3;
-            this.logo.x = width - 160;
-            this.logo.y = height - 130;
+            this.logoContainer.x = width * 0.85;
+            this.logoContainer.y = height * 0.9;
             if (this.visible) {
                 this.show();
             }
@@ -45,12 +47,23 @@ class StartScreen extends Container {
 
         this.addChild(this.startButton);
 
-        this.logo = Sprite.from('fishenalLogo');
-        this.logo.width = 147;
-        this.logo.height = 107;
-        this.logo.x = window.innerWidth - 160;
-        this.logo.y = window.innerHeight - 130;
-        this.addChild(this.logo);
+        this.logoContainer = new Container();
+        this.logoContainer.x = window.innerWidth * 0.85;
+        this.logoContainer.y = window.innerHeight * 1.1;
+        const logo = Sprite.from('fishenalLogo');
+        logo.width = 147;
+        logo.height = 107;
+        logo.anchor.y = 0.5;
+        this.logoContainer.addChild(logo);
+
+        const cLogo = Sprite.from('crazyGameLogo');
+        cLogo.width = 165;
+        cLogo.height = 60;
+        cLogo.anchor.y = 0.5;
+        cLogo.x = -170;
+        this.logoContainer.addChild(cLogo);
+
+        this.addChild(this.logoContainer);
     }
     public show() {
         this.visible = true;
@@ -65,7 +78,7 @@ class StartScreen extends Container {
             duration: 0.8,
             ease: 'power2.out',
         });
-        this.logo.visible = true;
+        this.logoContainer.visible = true;
     }
     public hide() {
         this.visible = false;
@@ -83,7 +96,7 @@ class StartScreen extends Container {
             },
         });
 
-        this.logo.visible = false;
+        this.logoContainer.visible = false;
     }
 }
 export default StartScreen;
