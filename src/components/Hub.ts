@@ -1,6 +1,6 @@
 import { Container, Sprite, Texture } from 'pixi.js';
 import { emitter } from '../store/emitter';
-
+import { autorun } from 'mobx';
 import { scoreSingleton } from '../store/score';
 import { CommonBoard } from '../ui/CommonBoard';
 export class HandSign extends Sprite {
@@ -31,11 +31,17 @@ export class ScoreBoard extends Container {
             height,
             padding: 10,
         });
-        emitter.on('scoreChange', (score: number) => {
+        autorun(() => {
             scoreBoard.update({
-                label: String(score),
+                label: String(scoreSingleton.score),
             });
         });
+
+        // emitter.on('scoreChange', (score: number) => {
+        //     scoreBoard.update({
+        //         label: String(score),
+        //     });
+        // });
         emitter.on('onResize', ({ width }) => {
             this.position.x = width / 2 + this.width / 2;
         });

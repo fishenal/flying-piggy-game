@@ -1,10 +1,17 @@
-import { emitter } from './emitter';
+import { makeObservable, observable, action } from 'mobx';
 
 export const hiScoreLsKey = 'piggyHiScore';
 class Score {
     public score: number;
     public hiScore: string;
     constructor() {
+        makeObservable(this, {
+            score: observable,
+            hiScore: observable,
+            reset: action,
+            count: action,
+            updateHiScore: action,
+        });
         this.score = 0;
         this.hiScore = '0';
     }
@@ -19,11 +26,12 @@ class Score {
     public reset() {
         this.score = 0;
         this.init();
-        emitter.emit('scoreChange', this.score);
+        // emitter.emit('scoreChange', this.score);
     }
     public count() {
         this.score += 1;
-        emitter.emit('scoreChange', this.score);
+        console.log(this.score);
+        // emitter.emit('scoreChange', this.score);
     }
     public updateHiScore(newScore: number) {
         this.hiScore = String(newScore);
