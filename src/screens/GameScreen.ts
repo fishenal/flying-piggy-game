@@ -53,7 +53,7 @@ class GameScreen extends Container {
         const startScreen = new StartScreen();
         startScreen.show();
         startScreen.onStartClick = () => {
-            window.CrazyGames.SDK.game.gameplayStart();
+            // window.CrazyGames.SDK.game.gameplayStart();
             this.bird.toGamePosition(() => {
                 gameContainer.piles.show();
                 indicator.show();
@@ -76,7 +76,7 @@ class GameScreen extends Container {
         });
 
         emitter.on('onBack', () => {
-            window.CrazyGames.SDK.game.gameplayStop();
+            // window.CrazyGames.SDK.game.gameplayStop();
             this.bird.toStartPosition(() => {
                 startScreen.show();
             });

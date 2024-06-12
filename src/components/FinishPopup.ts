@@ -149,7 +149,7 @@ export class FinishPopup extends CommonPopup {
                         emitter.emit('recoverMute');
                     },
                 };
-                window.CrazyGames.SDK.ad.requestAd('rewarded', callbacks);
+                // window.CrazyGames.SDK.ad.requestAd('rewarded', callbacks);
             } catch (error) {
                 console.log('Error rewarded ad', error);
                 this.againPlay();
@@ -175,7 +175,7 @@ export class FinishPopup extends CommonPopup {
             }
 
             try {
-                window?.CrazyGames.SDK.game.happytime();
+                // window?.CrazyGames.SDK.game.happytime();
             } catch (err) {
                 console.log('crazy fun time error', err);
             }

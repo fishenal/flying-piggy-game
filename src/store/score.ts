@@ -17,7 +17,8 @@ class Score {
     }
     public init() {
         try {
-            const hiScore = window.CrazyGames.SDK.data.getItem(hiScoreLsKey);
+            const hiScore = localStorage.getItem(hiScoreLsKey);
+            // const hiScore = window.CrazyGames.SDK.data.getItem(hiScoreLsKey);
             this.hiScore = hiScore || '0';
         } catch (error) {
             console.log('get hiscore from crazy error', error);
@@ -35,8 +36,8 @@ class Score {
     }
     public updateHiScore(newScore: number) {
         this.hiScore = String(newScore);
-        // localStorage.setItem(hiScoreLsKey, String(newScore));
-        window.CrazyGames.SDK.data.setItem(hiScoreLsKey, String(newScore));
+        localStorage.setItem(hiScoreLsKey, String(newScore));
+        // window.CrazyGames.SDK.data.setItem(hiScoreLsKey, String(newScore));
     }
 }
 export const scoreSingleton = new Score();
