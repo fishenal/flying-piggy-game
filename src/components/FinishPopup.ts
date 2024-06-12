@@ -137,18 +137,18 @@ export class FinishPopup extends CommonPopup {
             try {
                 emitter.emit('mute');
 
-                const callbacks = {
-                    adFinished: () => {
-                        console.log('End rewarded ad');
-                        this.continuePlay();
-                        emitter.emit('recoverMute');
-                    },
-                    adError: (error: unknown) => {
-                        console.log('Error rewarded ad', error);
-                        this.againPlay();
-                        emitter.emit('recoverMute');
-                    },
-                };
+                // const callbacks = {
+                //     adFinished: () => {
+                //         console.log('End rewarded ad');
+                //         this.continuePlay();
+                //         emitter.emit('recoverMute');
+                //     },
+                //     adError: (error: unknown) => {
+                //         console.log('Error rewarded ad', error);
+                //         this.againPlay();
+                //         emitter.emit('recoverMute');
+                //     },
+                // };
                 // window.CrazyGames.SDK.ad.requestAd('rewarded', callbacks);
             } catch (error) {
                 console.log('Error rewarded ad', error);
